@@ -48,8 +48,21 @@ socketHandler(io);
 const allowedOrigins = [
   "https://eventopia.shop",  
   "http://localhost:3000",
-  "https://test.payu.in", 
+  "https://test.payu.in", 
 ];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true); 
+      } else {
+        callback(new Error("Not allowed by CORS")); 
+      }
+    },
+    credentials: true, 
+  })
+);
 
 
 
