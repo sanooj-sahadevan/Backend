@@ -45,10 +45,30 @@ socketHandler(io);
 //   credentials: true,
 // }));
 
+// const allowedOrigins = [
+//   "https://eventopia.shop",  
+//   "http://localhost:3000",
+//   "https://test.payu.in", 
+// ];
+
+// app.use(
+//   cors({
+//     origin: (origin, callback) => {
+//       if (!origin || allowedOrigins.includes(origin)) {
+//         callback(null, true); 
+//       } else {
+//         callback(new Error("Not allowed by CORS")); 
+//       }
+//     },
+//     credentials: true, 
+//   })
+// );
+
 const allowedOrigins = [
-  "https://eventopia.shop",  
+  "https://eventopia.shop",
+  "https://www.eventopia.shop",
   "http://localhost:3000",
-  "https://test.payu.in", 
+  "https://test.payu.in",
 ];
 
 app.use(
@@ -57,12 +77,13 @@ app.use(
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true); 
       } else {
-        callback(new Error("Not allowed by CORS")); 
+        callback(new Error("Not allowed by CORS"));
       }
     },
-    credentials: true, 
+    credentials: true,
   })
 );
+
 
 
 
