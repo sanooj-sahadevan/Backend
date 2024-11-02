@@ -39,11 +39,25 @@ export const io = new serverSocket(httpServer, {
 socketHandler(io);
 
 
+// app.use(cors({
+//   // origin: 'https://www.eventopia.shop',
+//   origin: ['https://www.eventopia.shop', 'https://eventopia.shop'],
+//   credentials: true,
+// }));
+
+const allowedOrigins = ['https://www.eventopia.shop', 'https://eventopia.shop'];
+
 app.use(cors({
-  // origin: 'https://www.eventopia.shop',
-  origin: ['https://www.eventopia.shop', 'https://eventopia.shop'],
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
 }));
+
 
 
 // export const io = new serverSocket(httpServer, {
@@ -78,8 +92,9 @@ app.use(
     },
   })
 );
+app.use('/v1/api/users', userRoutes);
 
-app.use('/user', userRoutes);
+// app.use('/user', userRoutes);
 app.use('/vendor', vendorRoutes);
 app.use('/admin', adminRoutes);
 app.use('/chat', chatRoutes);
