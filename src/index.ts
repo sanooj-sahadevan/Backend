@@ -30,14 +30,14 @@ const allowedOrigins = process.env.NODE_ENV === 'production'
   : ['http://localhost:3000'];
 
 app.use(cors({
-  origin: allowedOrigins,
+  origin:  '*', // Allow all origins
   credentials: true,
 }));
 
 // Socket.IO setup with environment-based CORS
 export const io = new serverSocket(httpServer, {
   cors: {
-    origin: allowedOrigins,
+    origin:  '*', // Allow all origins
     methods: ['GET', 'POST'],
     credentials: true,
   },
