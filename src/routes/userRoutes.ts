@@ -6,7 +6,6 @@ import { baseRepo } from "../Base Repository/BaseRepo";
 
 
 const router = Router();
-console.log('====================================---------sucess------------=====================');
 
 const userRepository = new UserRepository()
 const userService = new UserService(userRepository)

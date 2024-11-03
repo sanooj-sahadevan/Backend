@@ -110,7 +110,7 @@ const httpServer = createServer(app);
 
 // CORS configuration based on environment
 const allowedOrigins = process.env.NODE_ENV === 'production'
-  ? ['https://www.eventopia.shop', 'https://eventopia.shop']
+  ? ['https://e-vent-project-ii.vercel.app', 'https://www.eventopia.shop', 'https://eventopia.shop']
   : ['http://localhost:3000'];
 
 app.use(cors({
