@@ -30,7 +30,7 @@ const allowedOrigins = process.env.NODE_ENV === 'production'
   : ['http://localhost:3000'];
 
 app.use(cors({
-  origin:  '*', // Allow all origins
+  origin:  allowedOrigins, // Allow all origins
   credentials: true,
 }));
 
