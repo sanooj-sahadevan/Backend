@@ -161,7 +161,7 @@ app.use(
   })
 );
 
-app.use('/v1/api/users', userRoutes);
+app.use('/v1/api/user', userRoutes);
 app.use('/vendor', vendorRoutes);
 app.use('/admin', adminRoutes);
 app.use('/chat', chatRoutes);
