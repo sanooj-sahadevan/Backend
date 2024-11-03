@@ -42,6 +42,8 @@ export class UserController {
 
   async vendorList(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
+      console.log('okokok');
+      
       const vendors = await this.userService.getAllVendors();
       res.status(HttpStatus.OK).json(vendors);
     } catch (error) {
