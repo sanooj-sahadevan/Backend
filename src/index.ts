@@ -28,7 +28,6 @@ const httpServer = createServer(app);
 const allowedOrigins = process.env.NODE_ENV === 'production'
   ? ['https://www.eventopia.shop', 'https://eventopia.shop']
   : ['http://localhost:3000'];
-console.log('sucess====================================---------------------=====================');
 
 app.use(cors({
   origin:  allowedOrigins, // Allow all origins
