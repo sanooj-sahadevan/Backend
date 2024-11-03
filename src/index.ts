@@ -109,16 +109,28 @@ connectToMongoDB();
 const httpServer = createServer(app);
 
 // CORS configuration based on environment
-const allowedOrigins = process.env.NODE_ENV === 'production'
-  ? ['https://e-vent-project-ii.vercel.app', 'https://www.eventopia.shop', 'https://eventopia.shop']
-  : ['http://localhost:3000'];
 
-app.use(cors({
-  origin: allowedOrigins,
-  credentials: true,
-  methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'],
-  allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization']
-}));
+
+const allowedOrigins = [
+  "https://e-vent-project-ii.vercel.app",
+  "https://www.eventopia.shop",
+  "https://eventopia.shop", 'http://localhost:3000'
+];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'],
+    allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization']
+  })
+);
 
 export const io = new serverSocket(httpServer, {
   cors: {
