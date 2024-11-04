@@ -114,7 +114,7 @@ const httpServer = createServer(app);
 const allowedOrigins = [
   "https://e-vent-project-ii.vercel.app",
   "https://www.eventopia.shop",
-  "https://eventopia.shop", 'http://localhost:3000','*'
+  "https://eventopia.shop", 'http://localhost:3000', '*'
 ];
 
 app.use(
@@ -162,7 +162,12 @@ app.use(
 );
 console.log('step1');
 
-app.use('/v1/api/users', userRoutes);
+// app.use('/v1/api/users', userRoutes);
+app.use('/v1/api/users', (req, res, next) => {
+  console.log('suresh varma');
+  next();
+});
+
 app.use('/vendor', vendorRoutes);
 app.use('/admin', adminRoutes);
 app.use('/chat', chatRoutes);
