@@ -13,6 +13,8 @@ const userController = new UserController(userService)
 
 
 // Auth
+console.log('step2');
+
 router.post("/signup", userController.register.bind(userController));
 router.post("/verifyOtp", userController.verifyOtp.bind(userController));
 router.post("/login", userController.login.bind(userController));

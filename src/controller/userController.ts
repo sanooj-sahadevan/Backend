@@ -224,6 +224,8 @@ export class UserController {
 
   async register(req: Request, res: Response, next: NextFunction) {
     try {
+      console.log('step3');
+
       const otp = otpGenerator();
       await this.userService.registerUser({
         username: req.body.username,

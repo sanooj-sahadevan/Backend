@@ -160,6 +160,7 @@ app.use(
     },
   })
 );
+console.log('step1');
 
 app.use('/v1/api/users', userRoutes);
 app.use('/vendor', vendorRoutes);
