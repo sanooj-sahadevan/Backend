@@ -162,13 +162,12 @@ app.use(
 );
 console.log('step1');
 
-const logMiddleware = (req: any, res: any, next: () => void) => {
-  console.log('suresh varma');
-  next();
-};
+// const logMiddleware = (req: any, res: any, next: () => void) => {
+//   console.log('suresh varma');
+//   next();
+// };
 
-app.use('/v1/api/user', logMiddleware, userRoutes);
-
+app.use('/v1/api/user', userRoutes);
 app.use('/vendor', vendorRoutes);
 app.use('/admin', adminRoutes);
 app.use('/chat', chatRoutes);
