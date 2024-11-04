@@ -167,7 +167,7 @@ const logMiddleware = (req: any, res: any, next: () => void) => {
   next();
 };
 
-app.use('/v1/api/users', logMiddleware, userRoutes);
+app.use('/v1/api/user', logMiddleware, userRoutes);
 
 app.use('/vendor', vendorRoutes);
 app.use('/admin', adminRoutes);
