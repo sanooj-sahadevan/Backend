@@ -127,14 +127,14 @@ app.use(
       }
     },
     credentials: true,
-    methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'],
+    methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE','PATCH'],
     allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization']
   })
 );
 
 export const io = new serverSocket(httpServer, {
   cors: {
-    origin: '*',
+    origin: allowedOrigins,
     methods: ['GET', 'POST'],
     credentials: true,
   },
@@ -162,10 +162,6 @@ app.use(
 );
 console.log('step1');
 
-// const logMiddleware = (req: any, res: any, next: () => void) => {
-//   console.log('suresh varma');
-//   next();
-// };
 
 app.use('/v1/api/user', userRoutes);
 app.use('/v1/api/vendor', vendorRoutes);

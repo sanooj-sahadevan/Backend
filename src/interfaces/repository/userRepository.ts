@@ -34,4 +34,5 @@ export interface IUserRepository {
     getSlotsByWorkerIdFromRepo(vendorId: any): Promise<ISlot[]>
     updateBookingStatus(bookingData: any): Promise<any>
     searchVendorsByName(term: string): Promise<any>
+    updatePasswordInDatabase (email: string, hashedPassword: string):Promise<any>
 }

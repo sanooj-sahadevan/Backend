@@ -250,7 +250,7 @@ export class UserService {
       throw new Error(`Service Error - Finding vendor: ${error}`);
     }
   }
-  
+
 
 
   async findEvent(bookingId: string) {
@@ -337,12 +337,25 @@ export class UserService {
   }
 
 
-  async findchangePassword(userId: string, newPassword: string) {
-    console.log('Updating password for userId:', userId);
-    const updatedPassword = await this.userRepository.changepassword(userId, newPassword);
-    if (!updatedPassword) throw new Error(`Booking with id not found`);
-    return updatedPassword;
+  async findChangePassword(email: string, newPassword: string) { 
+    console.log('Updating password for email:', email);
+    const otp = otpGenerator();
+    console.log(otp);
+    
+    await sendEmail(email, otp); 
+
+    return otp;
   }
+  
+
+async  updatePasswordService  (email: string, newPassword: string)  {
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+  await this.userRepository.updatePasswordInDatabase(email, hashedPassword);
+};
+
+
+
+
 
 
   async findUserByEmailService(email: string) {
@@ -357,61 +370,107 @@ export class UserService {
   }
 
 
+  // async generatePaymentHash({
+  //   txnid, amount, productinfo, username, email, udf1, udf2, udf3, udf4, udf5, udf6, udf7
+  // }: {
+  //   txnid: string,
+  //   amount: string,
+  //   productinfo: string,
+  //   username: string,
+  //   email: string,
+  //   udf1: string,
+  //   udf2: string,
+  //   udf3: string,
+  //   udf4: string,
+  //   udf5: string,
+  //   udf6: string, 
+  //   udf7: string, 
+  // }) {
+  //   try {
+  //     console.log('123');
+
+  //     const hashString = `${process.env.PAYU_MERCHANT_KEY}|${txnid}|${amount}|${productinfo}|${username}|${email}|${udf1}|${udf2}|${udf3}|${udf4}|${udf5}|${udf6}|${udf7}||||${process.env.PAYU_SALT}`;
+  //     console.log('123456');
+
+  //     const sha = new jsSHA("SHA-512", "TEXT");
+  //     sha.update(hashString);
+  //     const hash = sha.getHash("HEX");
+  //     console.log(hash, 'hash');
+  //     // const bookingData = {
+  //     //   txnid,
+  //     //   amount,
+  //     //   productinfo,
+  //     //   username,
+  //     //   email,
+  //     //   udf1,
+  //     //   udf2,
+  //     //   udf3,
+  //     //   udf4,
+  //     //   udf5,
+  //     //   udf6,
+  //     //   udf7,
+  //     //   paymentStatus: 'pending', 
+  //     //   paymentHash: hash         
+  //     // };
+
+  //     // const savedBooking = await this.userRepository.saveBooking(bookingData);
+  //     return hash;
+  //   } catch (error) {
+  //     throw new Error("Error generating payment hash");
+  //   }
+  // }
+
+
 
 
   async generatePaymentHash({
-    txnid, amount, productinfo, username, email, udf1, udf2, udf3, udf4, udf5, udf6, udf7
+    txnid,
+    amount,
+    productinfo,
+    firstname,
+    email,
+    udf1,
+    udf2,
+    udf3,
+    udf4,
+    udf5,
   }: {
-    txnid: string,
-    amount: string,
-    productinfo: string,
-    username: string,
-    email: string,
-    udf1: string,
-    udf2: string,
-    udf3: string,
-    udf4: string,
-    udf5: string,
-    udf6: string, // New field
-    udf7: string, // New field
+    txnid: string;
+    amount: string;
+    productinfo: string;
+    firstname: string;
+    email: string;
+    udf1: string;
+    udf2: string;
+    udf3: string;
+    udf4: string;
+    udf5: string;
   }) {
     try {
-      console.log('123');
+      const key = process.env.PAYU_MERCHANT_KEY;
+      const salt = process.env.PAYU_SALT;
 
-      const hashString = `${process.env.PAYU_MERCHANT_KEY}|${txnid}|${amount}|${productinfo}|${username}|${email}|${udf1}|${udf2}|${udf3}|${udf4}|${udf5}|${udf6}|${udf7}||||${process.env.PAYU_SALT}`;
-      console.log('123456');
+      // Make sure key and salt are available
+      if (!key || !salt) {
+        throw new Error("Merchant key or salt not found in environment variables");
+      }
 
+      // Construct the hash string
+      const hashString = `${key}|${txnid}|${amount}|${productinfo}|${firstname}|${email}|${udf1}|${udf2}|${udf3}|${udf4}|${udf5}|||||${salt}`;
+      console.log("Hash String:", hashString);
+
+      // Generate hash using SHA-512
       const sha = new jsSHA("SHA-512", "TEXT");
       sha.update(hashString);
       const hash = sha.getHash("HEX");
-      console.log(hash, 'hash');
-      const bookingData = {
-        txnid,
-        amount,
-        productinfo,
-        username,
-        email,
-        udf1,
-        udf2,
-        udf3,
-        udf4,
-        udf5,
-        udf6,
-        udf7,
-        paymentStatus: 'pending',
-        paymentHash: hash
-      };
 
-      const savedBooking = await this.userRepository.saveBooking(bookingData);
-      // return savedBooking;
+      console.log("Generated Payment Hash:", hash);
       return hash;
     } catch (error) {
+      console.error("Error generating payment hash:", error);
       throw new Error("Error generating payment hash");
     }
   }
-
-
-
 
 
 
@@ -449,15 +508,7 @@ export class UserService {
   }
 
 
-  // async reviewService(reviewData: { reviews: string; stars: number; userId: string; vendorId: string }): Promise<any> {
-  //   try {
-  //     const review = await this.userRepository.reviewRepository(reviewData);
-  //     return review;
-  //   } catch (error) {
-  //     console.error("Error in reviewService:", error);
-  //     throw error; 
-  //   }
-  // }
+
 
   async reviewService(reviewData: { reviews: string; stars: number; userId: string; vendorId: string }): Promise<any> {
     try {

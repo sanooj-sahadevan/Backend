@@ -420,6 +420,20 @@ console.log('ziyavudeheen');
     }
   }
 
+async updatePasswordInDatabase (email: string, hashedPassword: string) {
+    const user = await UserModel.findOneAndUpdate(
+      { email },
+      { password: hashedPassword },
+      { new: true }
+    );
+  
+    if (!user) {
+      throw new Error('User not found');
+    }
+  
+    return user;
+  };
+
   async chatDB(userId: string) {
     try {
       const chats = await chatModel.find({ userId }).select('_id');
@@ -517,6 +531,8 @@ console.log('ziyavudeheen');
 
 
 
+  
+  
   async saveBooking(bookingData: any): Promise<any> {
     try {
       console.log('sanooj');
@@ -532,19 +548,20 @@ console.log('ziyavudeheen');
         eventType: bookingData.udf6,
         category: bookingData.udf5,
         occupancy: bookingData.occupancy,
-        // Check for "nil" or any invalid ObjectId string
-        dishesId: bookingData.udf3 !== "nil" ? bookingData.udf3 : null,
-        auditoriumId: bookingData.udf2 !== "nil" ? bookingData.udf2 : null,
+        dishesId: bookingData.udf3 || null,
+        auditoriumId: bookingData.udf2 || null
       });
-  
+
       const savedBooking = await newBooking.save();
+      console.log('akil----------------------------------');
+      
       return savedBooking;
     } catch (error) {
       console.error('Error saving booking:', error);
       throw new Error('Error saving booking');
     }
   }
-  
+
 
 
   async searchVendorsByName(term: string) {

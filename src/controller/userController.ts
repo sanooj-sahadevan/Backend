@@ -103,13 +103,23 @@ export class UserController {
   async editUserDetails(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const userDetails = req.body;
-      console.log('Request Body:', userDetails);
+      console.log('Received user details for update:', userDetails);
+  
       const updatedUser = await this.userService.editUser(userDetails);
-      res.status(HttpStatus.OK).json(updatedUser);
+      
+      if (!updatedUser) {
+        res.status(404).json({ message: 'User not found' });
+        return;
+      }
+      
+      res.status(200).json({ message: 'User updated successfully', data: updatedUser });
     } catch (error) {
+      console.error('Error in editUserDetails controller:', error);
+      res.status(500).json({ message: 'Internal server error' });
       next(error);
     }
   }
+  
 
 
 
@@ -203,22 +213,38 @@ export class UserController {
 
   async payment(req: Request, res: Response, next: NextFunction) {
     try {
-      const { txnid, amount, productinfo, username, email, udf1, udf2, udf3, udf4, udf5, udf6, udf7 } = req.body;
-      if (!txnid || !amount || !productinfo || !username || !email || !udf1 || !udf2 || !udf3 || !udf4 || !udf5 || !udf6 || !udf7) {
-        console.log('poi');
+      const { txnid, amount, productinfo, firstname, email, udf1, udf2, udf3, udf4, udf5 } = req.body;
+  
+      // Check for missing mandatory fields
+      if (!txnid || !amount || !productinfo || !firstname || !email || !udf1 || !udf2 || !udf3 || !udf4 || !udf5) {
+        console.log("Mandatory fields missing");
         return res.status(400).send("Mandatory fields missing");
       }
-
+  
+      // Log each parameter for debugging
+      console.log("Parameters received:", { txnid, amount, productinfo, firstname, email, udf1, udf2, udf3, udf4, udf5 });
+  
+      // Generate hash using the service function
       const hash = await this.userService.generatePaymentHash({
-        txnid, amount, productinfo, username, email, udf1, udf2, udf3, udf4, udf5, udf6, udf7,
+        txnid, 
+        amount, 
+        productinfo, 
+        firstname, 
+        email, 
+        udf1, 
+        udf2, 
+        udf3, 
+        udf4, 
+        udf5
       });
-      console.log('last', { hash, udf6, udf7 });
-
-      res.send({ hash, udf6, udf7 });
+  
+      console.log("Generated hash:", { hash });
+      res.send({ hash });
     } catch (error) {
       next(error);
     }
   }
+  
 
 
 
@@ -326,16 +352,43 @@ export class UserController {
   }
 
   async changePassword(req: Request, res: Response, next: NextFunction) {
-    const { id } = req.params;
+    const { email } = req.params; 
     const { newPassword } = req.body;
     try {
-      const updatedPassword = await this.userService.findchangePassword(id, newPassword);
+      const updatedPassword = await this.userService.findChangePassword(email, newPassword); // Updated method name
       res.status(HttpStatus.OK).json(updatedPassword);
     } catch (error) {
       next(error);
-
     }
   }
+
+
+
+  async updatePasswordController(req: Request, res: Response)  {
+    const { email } = req.params;
+    const { newPassword } = req.body;
+  
+    if (!email || !newPassword) {
+      return res.status(400).json({ message: 'Email and new password are required.' });
+    }
+    try {
+      await this.userService.updatePasswordService(email, newPassword);
+      res.status(200).json({ message: 'Password updated successfully.' });
+    } catch (error) {
+      console.error('Error updating password:', error);
+      res.status(500).json({ message: 'Failed to update password.' });
+    }
+  };
+
+
+
+
+
+
+
+
+
+  
 
   async getUnreadMessagesCount(
     req: any,
@@ -349,7 +402,7 @@ export class UserController {
       if (!userId) {
         return res.status(HttpStatus.BAD_REQUEST).json({ error: "User ID is required" });
       }
-      console.log('Controller hit with valid userId');
+      // console.log('Controller hit with valid userId');
 
       const chatServiceData = await this.userService.chatServices({ userId });
       const chatIds = chatServiceData.map((chat: any) => chat._id);
