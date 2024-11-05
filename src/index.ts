@@ -168,9 +168,9 @@ console.log('step1');
 // };
 
 app.use('/v1/api/user', userRoutes);
-app.use('/vendor', vendorRoutes);
-app.use('/admin', adminRoutes);
-app.use('/chat', chatRoutes);
+app.use('/v1/api/vendor', vendorRoutes);
+app.use('/v1/api/admin', adminRoutes);
+app.use('/v1/api/chat', chatRoutes);
 app.use(errorHandler);
 
 httpServer.listen(PORT, () => {
