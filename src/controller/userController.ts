@@ -134,15 +134,18 @@ export class UserController {
   }
 
   async fetchReview(req: Request, res: Response, next: NextFunction): Promise<void> {
+    console.log('Controller review');
+  
     try {
-      const { vendorId, userId } = req.query;
-      const result = await this.userService.fetchReviewById(vendorId as string, userId as string);
-
+      const { vendorId } = req.params;
+      const result = await this.userService.fetchReviewById(vendorId as string);
+  
       res.status(HttpStatus.OK).json(result);
     } catch (error) {
       next(error);
     }
   }
+  
 
   async fetchNotifications(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {

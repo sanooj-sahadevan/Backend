@@ -190,6 +190,8 @@ console.log('ziyavudeheen');
 
   async findReviewByIdInDb(vendorId: string, userId: string) {
     try {
+      console.log('repository revuw');
+      
       const review = await Reviews.find({
         userId,
         vendorId,

@@ -157,6 +157,8 @@ export class UserService {
 
   async fetchReviewById(vendorId: string, userId: string) {
     try {
+      console.log('service. review');
+      
       const review = await this.userRepository.findReviewByIdInDb(vendorId, userId);
 
       if (!review || !review.review) {

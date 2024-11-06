@@ -145,6 +145,9 @@ export class VendorController {
 
   async getPresignedUrl(req: Request, res: Response, next: NextFunction) {
     try {
+
+      console.log('hey hey hey hey hy hey ehy ehye hey ehy hey hey ');
+      
       const { fileName, fileType } = req.query;
       if (!fileName || !fileType) {
         return res.status(400).json({ error: "fileName and fileType are required" });
@@ -232,16 +235,18 @@ export class VendorController {
 
   async fetchReviews(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
+      console.log('review controller');
+      
       const { vendorId } = req.params;
       const Reviews = await this.vendorService.findReviewsVendorById(vendorId);
       if (!Reviews || Reviews.length === 0) {
-        res.status(HttpStatus.NOT_FOUND).json({ message: "No Reviews found for this vendor" });
+        res.status(HttpStatus.OK).json({ message: "No Reviews found for this vendor" });
       } else {
         res.status(HttpStatus.OK).json(Reviews);
       }
 
     } catch (error) {
-      console.error('Error in fetchFoodDetails:', error);
+      console.error('Error in fetchReviews:', error);
       next(error);
     }
   }
