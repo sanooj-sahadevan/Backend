@@ -96,7 +96,7 @@ import { createServer } from 'http';
 import { Server as serverSocket } from 'socket.io';
 import { socketHandler } from './utils/socket/chat';
 import { errorHandler } from './middleware/errorHandling';
-import logger from './utils/logger';
+// import logger from './utils/logger';
 
 dotenv.config();
 
@@ -155,12 +155,11 @@ app.use(
           status: message.split(" ")[2],
           responseTime: message.split(" ")[3],
         };
-        logger.info(JSON.stringify(logObject));
+        // logger.info(JSON.stringify(logObject));
       },
     },
   })
 );
-console.log('step1');
 
 
 app.use('/v1/api/user', userRoutes);
