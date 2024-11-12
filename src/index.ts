@@ -108,7 +108,6 @@ connectToMongoDB();
 
 const httpServer = createServer(app);
 
-// CORS configuration based on environment
 
 
 const allowedOrigins = [
@@ -171,3 +170,5 @@ app.use(errorHandler);
 httpServer.listen(PORT, () => {
   console.log(`Server started running on http://localhost:${PORT}/`);
 });
+
+// index..ts
