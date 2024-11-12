@@ -168,9 +168,8 @@ app.use(
   })
 );
 
-
-app.use('/v1/api/user', userRoutes);
 app.use('/v1/api/vendor', vendorRoutes);
+app.use('/v1/api/user', userRoutes);
 app.use('/v1/api/admin', adminRoutes);
 app.use('/v1/api/chat', chatRoutes);
 app.use(errorHandler);
