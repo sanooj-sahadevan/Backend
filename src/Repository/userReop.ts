@@ -292,6 +292,49 @@ console.log('ziyavudeheen');
 
 
 
+  // async updateBookingStatus(bookingData: any) {
+  //   try {
+  //     const { txnid, status, StartingDate, EndingDate, vendorId } = bookingData;
+  //     const bookings = await bookedModel.find({ txnId: txnid });
+  //     console.log(bookings, 'liston');
+
+  //     if (bookings.length > 1) {
+  //       const [firstBooking, ...duplicateBookings] = bookings;
+  //       await bookedModel.deleteMany({ _id: { $in: duplicateBookings.map(b => b._id) } });
+  //       console.log(`Deleted ${duplicateBookings.length} duplicate bookings for txnid: ${txnid}`);
+
+  //       firstBooking.paymentStatus = 'success';
+  //       await firstBooking.save();
+  //       console.log('Booking updated successfully:', firstBooking);
+
+  //       await this.updateSlotAvailability(firstBooking.StartingDate, firstBooking.EndingDate, vendorId);
+  //       return firstBooking;
+  //     } else if (bookings.length === 1) {
+  //       const booking = bookings[0];
+  //       booking.paymentStatus = 'success';
+  //       await booking.save();
+  //       console.log('Booking updated successfully:', booking);
+
+  //       await this.updateSlotAvailability(booking.StartingDate, booking.EndingDate, vendorId);
+  //       return booking;
+  //     } else {
+  //       const newBooking = await bookedModel.create({
+  //         txnId: txnid,
+  //         paymentStatus: status,
+  //         ...bookingData,
+  //         createdAt: new Date(),
+  //       });
+  //       console.log('New booking created:', newBooking);
+
+  //       await this.updateSlotAvailability(newBooking.StartingDate, newBooking.EndingDate, vendorId);
+  //       return newBooking;
+  //     }
+  //   } catch (error) {
+  //     console.error('Error updating booking:', error);
+  //     throw new Error('Database Error');
+  //   }
+  // }
+
   async updateBookingStatus(bookingData: any) {
     try {
       const { txnid, status, StartingDate, EndingDate, vendorId } = bookingData;
@@ -334,6 +377,8 @@ console.log('ziyavudeheen');
       throw new Error('Database Error');
     }
   }
+
+
 
 
 

@@ -214,41 +214,59 @@ export class UserController {
   }
 
 
+  // async payment(req: Request, res: Response, next: NextFunction) {
+  //   try {
+  //     const { txnid, amount, productinfo, firstname, email, udf1, udf2, udf3, udf4, udf5 } = req.body;
+  
+  //     // Check for missing mandatory fields
+  //     if (!txnid || !amount || !productinfo || !firstname || !email || !udf1 || !udf2 || !udf3 || !udf4 || !udf5) {
+  //       console.log("Mandatory fields missing");
+  //       return res.status(400).send("Mandatory fields missing");
+  //     }
+  
+  //     // Log each parameter for debugging
+  //     console.log("Parameters received:", { txnid, amount, productinfo, firstname, email, udf1, udf2, udf3, udf4, udf5 });
+  
+  //     // Generate hash using the service function
+  //     const hash = await this.userService.generatePaymentHash({
+  //       txnid, 
+  //       amount, 
+  //       productinfo, 
+  //       firstname, 
+  //       email, 
+  //       udf1, 
+  //       udf2, 
+  //       udf3, 
+  //       udf4, 
+  //       udf5
+  //     });
+  
+  //     console.log("Generated hash:", { hash });
+  //     res.send({ hash });
+  //   } catch (error) {
+  //     next(error);
+  //   }
+  // }
+  
+
   async payment(req: Request, res: Response, next: NextFunction) {
     try {
-      const { txnid, amount, productinfo, firstname, email, udf1, udf2, udf3, udf4, udf5 } = req.body;
-  
-      // Check for missing mandatory fields
-      if (!txnid || !amount || !productinfo || !firstname || !email || !udf1 || !udf2 || !udf3 || !udf4 || !udf5) {
-        console.log("Mandatory fields missing");
+      const { txnid, amount, productinfo, username, email, udf1, udf2, udf3, udf4, udf5, udf6, udf7 } = req.body;
+      if (!txnid || !amount || !productinfo || !username || !email || !udf1 || !udf2 || !udf3 || !udf4 || !udf5 || !udf6 || !udf7) {
+        console.log('poi');
         return res.status(400).send("Mandatory fields missing");
       }
-  
-      // Log each parameter for debugging
-      console.log("Parameters received:", { txnid, amount, productinfo, firstname, email, udf1, udf2, udf3, udf4, udf5 });
-  
-      // Generate hash using the service function
+
       const hash = await this.userService.generatePaymentHash({
-        txnid, 
-        amount, 
-        productinfo, 
-        firstname, 
-        email, 
-        udf1, 
-        udf2, 
-        udf3, 
-        udf4, 
-        udf5
+        txnid, amount, productinfo, username, email, udf1, udf2, udf3, udf4, udf5, udf6, udf7,
       });
-  
-      console.log("Generated hash:", { hash });
-      res.send({ hash });
+      console.log('last', { hash, udf6, udf7 });
+
+      res.send({ hash, udf6, udf7 });
     } catch (error) {
       next(error);
     }
   }
-  
-
 
 
   async register(req: Request, res: Response, next: NextFunction) {
@@ -297,6 +315,7 @@ export class UserController {
     }
   }
 
+  
 
   async saveData(req: Request, res: Response, next: NextFunction) {
     try {
@@ -337,6 +356,8 @@ export class UserController {
       next(error);
     }
   }
+
+
 
 
 

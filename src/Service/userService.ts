@@ -425,54 +425,121 @@ async  updatePasswordService  (email: string, newPassword: string)  {
 
 
 
+  // async generatePaymentHash({
+  //   txnid,
+  //   amount,
+  //   productinfo,
+  //   firstname,
+  //   email,
+  //   udf1,
+  //   udf2,
+  //   udf3,
+  //   udf4,
+  //   udf5,
+  // }: {
+  //   txnid: string;
+  //   amount: string;
+  //   productinfo: string;
+  //   firstname: string;
+  //   email: string;
+  //   udf1: string;
+  //   udf2: string;
+  //   udf3: string;
+  //   udf4: string;
+  //   udf5: string;
+  // }) {
+  //   try {
+  //     const key = process.env.PAYU_MERCHANT_KEY;
+  //     const salt = process.env.PAYU_SALT;
+
+  //     // Make sure key and salt are available
+  //     if (!key || !salt) {
+  //       throw new Error("Merchant key or salt not found in environment variables");
+  //     }
+
+  //     // Construct the hash string
+  //     const hashString = `${key}|${txnid}|${amount}|${productinfo}|${firstname}|${email}|${udf1}|${udf2}|${udf3}|${udf4}|${udf5}|||||${salt}`;
+  //     console.log("Hash String:", hashString);
+
+  //     // Generate hash using SHA-512
+  //     const sha = new jsSHA("SHA-512", "TEXT");
+  //     sha.update(hashString);
+  //     const hash = sha.getHash("HEX");
+
+  //     console.log("Generated Payment Hash:", hash);
+  //     return hash;
+  //   } catch (error) {
+  //     console.error("Error generating payment hash:", error);
+  //     throw new Error("Error generating payment hash");
+  //   }
+  // }
+
+ 
   async generatePaymentHash({
     txnid,
     amount,
     productinfo,
-    firstname,
+    username,
     email,
     udf1,
     udf2,
     udf3,
     udf4,
     udf5,
+    udf6,
+    udf7
   }: {
     txnid: string;
     amount: string;
     productinfo: string;
-    firstname: string;
+    username: string;
     email: string;
     udf1: string;
     udf2: string;
     udf3: string;
     udf4: string;
     udf5: string;
+    udf6: string;
+    udf7: string;
   }) {
     try {
-      const key = process.env.PAYU_MERCHANT_KEY;
-      const salt = process.env.PAYU_SALT;
+      console.log(process.env.PAYU_MERCHANT_KEY);
+      console.log(process.env.PAYU_SALT);
 
-      // Make sure key and salt are available
-      if (!key || !salt) {
-        throw new Error("Merchant key or salt not found in environment variables");
-      }
-
-      // Construct the hash string
-      const hashString = `${key}|${txnid}|${amount}|${productinfo}|${firstname}|${email}|${udf1}|${udf2}|${udf3}|${udf4}|${udf5}|||||${salt}`;
+      const hashString = `${process.env.PAYU_MERCHANT_KEY}|${txnid}|${amount}|${productinfo}|${username}|${email}|${udf1}|${udf2}|${udf3}|${udf4}|${udf5}|${udf6}|${udf7}||||${process.env.PAYU_SALT}`;
       console.log("Hash String:", hashString);
-
-      // Generate hash using SHA-512
+  
       const sha = new jsSHA("SHA-512", "TEXT");
       sha.update(hashString);
       const hash = sha.getHash("HEX");
-
-      console.log("Generated Payment Hash:", hash);
+      console.log("Generated Hash:", hash);
+  
+      const bookingData = {
+        txnid,
+        amount,
+        productinfo,
+        username,
+        email,
+        udf1,
+        udf2,
+        udf3,
+        udf4,
+        udf5,
+        udf6,
+        udf7,
+        paymentStatus: "pending",
+        paymentHash: hash,
+      };
+  
+      await this.userRepository.saveBooking(bookingData);
       return hash;
     } catch (error) {
-      console.error("Error generating payment hash:", error);
       throw new Error("Error generating payment hash");
     }
   }
+  
+
+
 
 
 
