@@ -595,8 +595,8 @@ async updatePasswordInDatabase (email: string, hashedPassword: string) {
         eventType: bookingData.udf6,
         category: bookingData.udf5,
         occupancy: bookingData.occupancy,
-        dishesId: bookingData.udf3 || null,
-        auditoriumId: bookingData.udf2 || null
+        dishesId: bookingData.udf3 !== "nil" ? bookingData.udf3 : null,
+         auditoriumId: bookingData.udf2 !== "nil" ? bookingData.udf2 : null,
       });
 
       const savedBooking = await newBooking.save();
