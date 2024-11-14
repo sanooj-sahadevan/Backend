@@ -101,7 +101,7 @@ import logger from './utils/logger';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 8082;
+const PORT = process.env.PORT || 8085;
 const morganFormat = ":method :url :status :response-time ms";
 
 connectToMongoDB();
