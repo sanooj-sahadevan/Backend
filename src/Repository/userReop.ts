@@ -121,6 +121,8 @@ console.log('ziyavudeheen');
       await user.save();
       return user;
     } catch (error) {
+
+      
       throw new Error('Database Error');
 
     }
