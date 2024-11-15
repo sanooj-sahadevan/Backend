@@ -190,6 +190,8 @@ console.log('ziyavudeheen');
 
   async findReviewByIdInDb(vendorId: string, userId: string) {
     try {
+      console.log(vendorId,userId);
+      
       console.log('repository revuw');
       
       const review = await Reviews.find({
@@ -546,7 +548,7 @@ async updatePasswordInDatabase (email: string, hashedPassword: string) {
 
 
   async updateVendorRating(vendorId: string, averageRating: number): Promise<any | null> {
-    console.log('updateVendorRating');
+    console.log('updateVendorRating',averageRating,vendorId);
 
     try {
       const updatedVendor = await VendorModel.findByIdAndUpdate(

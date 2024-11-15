@@ -7,6 +7,7 @@ import { io } from "..";
 import { ISlot } from "../interfaces/slot";
 
 import { IUserRepository } from "../interfaces/repository/userRepository";
+import { log } from "winston";
 
 
 export class UserService {
@@ -157,20 +158,20 @@ export class UserService {
 
   async fetchReviewById(vendorId: string, userId: string) {
     try {
-      console.log('service. review');
+      console.log('review service');
       
       const review = await this.userRepository.findReviewByIdInDb(vendorId, userId);
-
+  console.log(review);
+  
       if (!review || !review.review) {
         throw new Error('No review found');
       }
-      console.log(review, 'okokok');
-
-      return { review }
+      return { review };
     } catch (error) {
       throw new Error(`Error fetching review: ${error}`);
     }
   }
+  
 
   async fetchNotificationsById(userId: string) {
     try {

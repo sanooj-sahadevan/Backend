@@ -126,7 +126,7 @@ app.use(
       }
     },
     credentials: true,
-    methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE','PATCH'],
+    methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE', 'PATCH', "HEAD"],
     allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization']
   })
 );

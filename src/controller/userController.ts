@@ -134,17 +134,22 @@ export class UserController {
   }
 
   async fetchReview(req: Request, res: Response, next: NextFunction): Promise<void> {
-    console.log('Controller review');
-  
     try {
-      const { vendorId } = req.params;
-      const result = await this.userService.fetchReviewById(vendorId as string);
+      console.log('controlelr review');
+      
+      const { vendorId, userId } = req.query; // Retrieve from query, not params
+      if (!vendorId || !userId) {
+        res.status(HttpStatus.BAD_REQUEST).json({ message: 'vendorId and userId are required' });
+        return;
+      }
   
+      const result = await this.userService.fetchReviewById(vendorId as string, userId as string);
       res.status(HttpStatus.OK).json(result);
     } catch (error) {
       next(error);
     }
   }
+  
   
 
   async fetchNotifications(req: Request, res: Response, next: NextFunction): Promise<void> {

@@ -1,9 +1,0 @@
-{"level":"info","message":"{\"method\":\"POST\",\"url\":\"/v1/api/user/payment\",\"status\":\"200\",\"responseTime\":\"86.094\"}","timestamp":"2024-11-13T10:27:59.855Z"}
-{"level":"info","message":"{\"method\":\"POST\",\"url\":\"/v1/api/user/payment\",\"status\":\"200\",\"responseTime\":\"157.448\"}","timestamp":"2024-11-13T10:27:59.944Z"}
-{"level":"info","message":"{\"method\":\"POST\",\"url\":\"/v1/api/user/response/saveData\",\"status\":\"200\",\"responseTime\":\"233.337\"}","timestamp":"2024-11-13T10:28:44.090Z"}
-{"level":"info","message":"{\"method\":\"GET\",\"url\":\"/v1/api/user/fetchBookingDetails/67169bd88848b78cf8031e7c\",\"status\":\"200\",\"responseTime\":\"102.381\"}","timestamp":"2024-11-13T10:28:46.471Z"}
-{"level":"info","message":"{\"method\":\"GET\",\"url\":\"/v1/api/user/userunread-count?userId=67169bd88848b78cf8031e7c\",\"status\":\"200\",\"responseTime\":\"78.383\"}","timestamp":"2024-11-13T10:28:51.138Z"}
-{"level":"info","message":"{\"method\":\"GET\",\"url\":\"/v1/api/user/fetchBookingDetails/67169bd88848b78cf8031e7c\",\"status\":\"200\",\"responseTime\":\"84.646\"}","timestamp":"2024-11-13T10:28:53.943Z"}
-{"level":"info","message":"{\"method\":\"GET\",\"url\":\"/v1/api/user/fetchBookingDetails/67169bd88848b78cf8031e7c\",\"status\":\"200\",\"responseTime\":\"491.984\"}","timestamp":"2024-11-13T10:28:54.345Z"}
-{"level":"info","message":"{\"method\":\"GET\",\"url\":\"/v1/api/user/vendors\",\"status\":\"200\",\"responseTime\":\"625.367\"}","timestamp":"2024-11-13T11:54:45.592Z"}
-{"level":"info","message":"{\"method\":\"GET\",\"url\":\"/v1/api/user/vendors\",\"status\":\"200\",\"responseTime\":\"565.069\"}","timestamp":"2024-11-13T11:54:45.676Z"}
