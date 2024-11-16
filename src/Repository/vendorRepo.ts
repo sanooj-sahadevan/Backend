@@ -273,7 +273,6 @@ export class VendorRepository implements IVendorRepository {
   async updatedreviewRepo(reviewId: string) {
     try {
       const review = await Reviews.findById(reviewId);
-      console.log(review);
       if (!review || review.vendorVerified) {
         return null;
       }
@@ -403,8 +402,6 @@ export class VendorRepository implements IVendorRepository {
       );
 
       await Promise.all(notificationPromises);
-
-      console.log(`Notifications sent for dish: ${dishName}`);
     } catch (error) {
       console.error("Error in notifyDishAdded: ", error);
       throw new Error('Database operation failed');

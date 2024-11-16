@@ -367,8 +367,8 @@ export class VendorController {
 
   async createSlotController(req: Request, res: Response, next: NextFunction): Promise<any> {
     try {
-      const { startDate, endDate } = req.body; // Extract start and end dates from body
-      const { vendorId } = req.params; // Extract vendorId from URL params
+      const { startDate, endDate } = req.body; 
+      const { vendorId } = req.params; 
       if (!startDate || !endDate) {
         return res.status(400).json({ message: "Start and End dates are required" });
       }

@@ -31,21 +31,6 @@ export class ChatRepository implements IChatRepository {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   async markMessagesAsRead(chatId: string) {
     try {
       await messageModel.updateMany({ chatId }, { $set: { isRead: true } });

@@ -12,8 +12,6 @@ export class UserController {
 
   async login(req: Request, res: Response, next: NextFunction) {
     try {
-      console.log('234567');
-      
       const { email, password } = req.body;
       const { user, token } = await this.userService.loginUser(email, password);
       res.cookie("token", token, {
@@ -42,8 +40,6 @@ export class UserController {
 
   async vendorList(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      console.log('okokok');
-      
       const vendors = await this.userService.getAllVendors();
       res.status(HttpStatus.OK).json(vendors);
     } catch (error) {
@@ -104,14 +100,14 @@ export class UserController {
     try {
       const userDetails = req.body;
       console.log('Received user details for update:', userDetails);
-  
+
       const updatedUser = await this.userService.editUser(userDetails);
-      
+
       if (!updatedUser) {
         res.status(404).json({ message: 'User not found' });
         return;
       }
-      
+
       res.status(200).json({ message: 'User updated successfully', data: updatedUser });
     } catch (error) {
       console.error('Error in editUserDetails controller:', error);
@@ -119,7 +115,7 @@ export class UserController {
       next(error);
     }
   }
-  
+
 
 
 
@@ -135,22 +131,20 @@ export class UserController {
 
   async fetchReview(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      console.log('controlelr review');
-      
-      const { vendorId, userId } = req.query; // Retrieve from query, not params
+      const { vendorId, userId } = req.query;
       if (!vendorId || !userId) {
         res.status(HttpStatus.BAD_REQUEST).json({ message: 'vendorId and userId are required' });
         return;
       }
-  
+
       const result = await this.userService.fetchReviewById(vendorId as string, userId as string);
       res.status(HttpStatus.OK).json(result);
     } catch (error) {
       next(error);
     }
   }
-  
-  
+
+
 
   async fetchNotifications(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
@@ -219,40 +213,7 @@ export class UserController {
   }
 
 
-  // async payment(req: Request, res: Response, next: NextFunction) {
-  //   try {
-  //     const { txnid, amount, productinfo, firstname, email, udf1, udf2, udf3, udf4, udf5 } = req.body;
-  
-  //     // Check for missing mandatory fields
-  //     if (!txnid || !amount || !productinfo || !firstname || !email || !udf1 || !udf2 || !udf3 || !udf4 || !udf5) {
-  //       console.log("Mandatory fields missing");
-  //       return res.status(400).send("Mandatory fields missing");
-  //     }
-  
-  //     // Log each parameter for debugging
-  //     console.log("Parameters received:", { txnid, amount, productinfo, firstname, email, udf1, udf2, udf3, udf4, udf5 });
-  
-  //     // Generate hash using the service function
-  //     const hash = await this.userService.generatePaymentHash({
-  //       txnid, 
-  //       amount, 
-  //       productinfo, 
-  //       firstname, 
-  //       email, 
-  //       udf1, 
-  //       udf2, 
-  //       udf3, 
-  //       udf4, 
-  //       udf5
-  //     });
-  
-  //     console.log("Generated hash:", { hash });
-  //     res.send({ hash });
-  //   } catch (error) {
-  //     next(error);
-  //   }
-  // }
-  
+
 
   async payment(req: Request, res: Response, next: NextFunction) {
     try {
@@ -320,7 +281,7 @@ export class UserController {
     }
   }
 
-  
+
 
   async saveData(req: Request, res: Response, next: NextFunction) {
     try {
@@ -381,7 +342,7 @@ export class UserController {
   }
 
   async changePassword(req: Request, res: Response, next: NextFunction) {
-    const { email } = req.params; 
+    const { email } = req.params;
     const { newPassword } = req.body;
     try {
       const updatedPassword = await this.userService.findChangePassword(email, newPassword); // Updated method name
@@ -393,10 +354,10 @@ export class UserController {
 
 
 
-  async updatePasswordController(req: Request, res: Response)  {
+  async updatePasswordController(req: Request, res: Response) {
     const { email } = req.params;
     const { newPassword } = req.body;
-  
+
     if (!email || !newPassword) {
       return res.status(400).json({ message: 'Email and new password are required.' });
     }
@@ -417,7 +378,7 @@ export class UserController {
 
 
 
-  
+
 
   async getUnreadMessagesCount(
     req: any,
@@ -458,9 +419,7 @@ export class UserController {
       if (!reviews || !stars || !userId || !vendorId) {
         return res.status(400).json({ message: 'All fields are required' });
       }
-
       const reviewData = await this.userService.reviewService({ reviews, stars, userId, vendorId });
-
       res.status(HttpStatus.OK).json(reviewData);
     } catch (error) {
       next(error);
