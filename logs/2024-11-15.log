@@ -1,3 +1,0 @@
-{"level":"info","message":"{\"method\":\"GET\",\"url\":\"/v1/api/user/vendors\",\"status\":\"200\",\"responseTime\":\"399.971\"}","timestamp":"2024-11-15T09:10:41.423Z"}
-{"level":"info","message":"{\"method\":\"GET\",\"url\":\"/v1/api/user/fetchVendorDetails?vendorId=66e3f158ebbcf3a47b4e768e&userId=67169bd88848b78cf8031e7c\",\"status\":\"200\",\"responseTime\":\"606.143\"}","timestamp":"2024-11-15T09:10:50.977Z"}
-{"level":"info","message":"{\"method\":\"GET\",\"url\":\"/v1/api/user/fetchReview?vendorId=66e3f158ebbcf3a47b4e768e&userId=67169bd88848b78cf8031e7c\",\"status\":\"200\",\"responseTime\":\"748.730\"}","timestamp":"2024-11-15T09:10:51.133Z"}

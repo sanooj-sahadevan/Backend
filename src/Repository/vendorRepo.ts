@@ -82,6 +82,8 @@ export class VendorRepository implements IVendorRepository {
     vendorDetails: Vendor,
   ): Promise<Vendor> {
     try {
+      console.log('repo edit');
+      
       if (existingVendor) {
         existingVendor.vendorname = vendorDetails.vendorname;
         existingVendor.phone = vendorDetails.phone;

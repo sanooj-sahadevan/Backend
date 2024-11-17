@@ -86,6 +86,8 @@ export class VendorService implements IVendorService {
 
   async editVendorService(vendorDetails: any): Promise<any> {
     try {
+      console.log('vendor service',vendorDetails);
+      
       const existingVendor = await this.vendorRepository.findVendorByEmailRepo(vendorDetails.email);
 
       if (existingVendor) {

@@ -93,6 +93,8 @@ export class VendorController {
 
   async editVendorDetails(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
+      console.log('edit vendor controller');
+      
       const userDetails = req.body;
       const updatedUser = await this.vendorService.editVendorService(userDetails);
       res.status(HttpStatus.OK).json(updatedUser);

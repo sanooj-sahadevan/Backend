@@ -15,8 +15,8 @@ const UserSchema = new Schema<User>({
     pincode: { type: Number },
     reviews: { type: [String] },
     isBlocked: { type: Boolean, default: false },
-    latitude: { type: Number, required: true },
-    longitude: { type: Number, required: true },
+    latitude: { type: Number, required: false },
+    longitude: { type: Number, required: false },
 });
 
 const UserModel = mongoose.model<User>("User", UserSchema);
