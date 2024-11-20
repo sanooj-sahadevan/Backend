@@ -58,4 +58,5 @@ export interface IVendorService {
 
     getSlotsByWorkerId(vendorId: string): Promise<ISlot[]>
     saveVendorServiceImages(vendorId: string, photoUrls: string[]): Promise<void>
+    isDateRangeAvailable(vendorId: string, startDate: Date, endDate: Date): Promise<boolean>
 }

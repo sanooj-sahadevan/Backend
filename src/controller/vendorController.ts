@@ -398,6 +398,8 @@ export class VendorController {
     try {
       const vendorId = req.params.vendorId; // Get vendorId from route parameters
       const slots = await this.vendorService.getSlotsByWorkerId(vendorId);
+      console.log(slots,"heycontroller");
+      
       res.status(200).json(slots);
     } catch (error: any) {
       console.error("Error fetching slots:", error);
@@ -420,6 +422,22 @@ export class VendorController {
       return res.status(500).json({ message: `Error saving service images: ${error}` });
     }
   }
+
+  async  checkDateAvailability  (req: Request, res: Response)  {
+    const { vendorId, startingDate, endingDate } = req.body;
+
+    if (!vendorId || !startingDate || !endingDate) {
+        return res.status(400).json({ message: "Invalid input data" });
+    }
+
+    try {
+        const isAvailable = await this.vendorService.isDateRangeAvailable(vendorId, new Date(startingDate), new Date(endingDate));
+        res.status(200).json({ isAvailable });
+    } catch (error) {
+        console.error("Error in controller:", error);
+        res.status(500).json({ message: "Error checking date availability" });
+    }
+}
 
 
 

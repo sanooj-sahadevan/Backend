@@ -12,6 +12,7 @@ import { Slot } from "../models/slotModel";
 import { ISlot } from "../interfaces/slot";
 import UserModel from "../models/userModel";
 import { NotificationModel } from "../models/notificationModel";
+import { log } from "winston";
 
 
 
@@ -482,9 +483,51 @@ export class VendorRepository implements IVendorRepository {
     }
   }
 
+  async isDateRangeAvailable(vendorId: string, startDate: Date, endDate: Date): Promise<boolean> {
+    console.log(vendorId, startDate, endDate);
+
+    try {
+        // Fetch the vendor by ID
+        const vendor = await VendorModel.findOne({ _id: vendorId });
+
+        if (!vendor) {
+            console.error("Vendor not found");
+            return false;
+        }
+        // Check if availability is an array
+        if (!Array.isArray(vendor.availability)) {
+            console.error("Vendor availability data is not available or is not an array");
+            return false;
+        }
+        const isAvailable = vendor.availability.some((slot: { date: string | number | Date; isAvailable: boolean }) => {
+            const slotDate = new Date(slot.date);
+            if (isNaN(slotDate.getTime())) {
+                console.error("Invalid date found in availability data:", slot.date);
+                return false;
+            }
+            return (
+                slotDate >= startDate &&
+                slotDate <= endDate &&
+                slot.isAvailable
+            );
+        });
+
+        return isAvailable;
+    } catch (error) {
+        console.error("Error in repository:", error);
+        throw new Error("Error checking date range availability.");
+    }
+}
+
+
+
+
 
 
 }
+
+
+
 
 
 

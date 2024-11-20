@@ -8,6 +8,7 @@ import { ISlot } from "../interfaces/slot";
 
 import { IUserRepository } from "../interfaces/repository/userRepository";
 import { log } from "winston";
+import { generateAccessToken } from "../utils/generateJWT";
 
 
 export class UserService {
@@ -56,11 +57,8 @@ export class UserService {
       if (!isPasswordValid) {
         throw new Error("Invalid Email/Password");
       }
-
-      const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET!, {
-        expiresIn: "1h",
-      });
-
+      const accessToken = generateAccessToken(user._id, "user");
+      const refreshToken = generateRefreshToken(user._id, "user");
       return { user, token };
     } catch (error: any) {
       console.error('Error during login:', error);
@@ -531,6 +529,9 @@ async  updatePasswordService  (email: string, newPassword: string)  {
         paymentStatus: "pending",
         paymentHash: hash,
       };
+  console.log(udf7,'end');
+  console.log(udf4,'start');
+
   
       await this.userRepository.saveBooking(bookingData);
       return hash;
@@ -603,7 +604,10 @@ async  updatePasswordService  (email: string, newPassword: string)  {
 
   async getSlotsByWorkerId(vendorId: string): Promise<ISlot[]> {
     try {
-      return await this.userRepository.getSlotsByWorkerIdFromRepo(vendorId);
+      let result =  await this.userRepository.getSlotsByWorkerIdFromRepo(vendorId);
+      console.log(result);
+      return result
+      
     } catch (error) {
       console.error("Error fetching slots from repository:", error);
       throw error;
@@ -653,4 +657,8 @@ async  updatePasswordService  (email: string, newPassword: string)  {
 
 
 
+
+function generateRefreshToken(_id: any, arg1: string) {
+  throw new Error("Function not implemented.");
+}
 

@@ -400,6 +400,21 @@ export class VendorService implements IVendorService {
       throw new Error(`Failed to save service images: ${error}`);
     }
   }
+
+
+  async isDateRangeAvailable(vendorId: string, startDate: Date, endDate: Date): Promise<boolean> {
+    try {
+      return this.vendorRepository.isDateRangeAvailable(vendorId, startDate, endDate);
+
+    } catch (error) {
+      throw new Error(`Failed to save service images: ${error}`);
+
+    }
+}
+
+
+
+
 }
 
 

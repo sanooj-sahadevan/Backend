@@ -121,7 +121,7 @@ export class UserRepository extends BaseRepository<User> implements IUserReposit
       return user;
     } catch (error) {
 
-      
+
       throw new Error('Database Error');
 
     }
@@ -182,10 +182,10 @@ export class UserRepository extends BaseRepository<User> implements IUserReposit
 
   async findReviewByIdInDb(vendorId: string, userId: string) {
     try {
-      console.log(vendorId,userId);
-      
+      console.log(vendorId, userId);
+
       console.log('repository revuw');
-      
+
       const review = await Reviews.find({
         userId,
         vendorId,
@@ -259,7 +259,7 @@ export class UserRepository extends BaseRepository<User> implements IUserReposit
 
   async finddishesByIdInDb(dishesId: string) {
     console.log('thenkasi');
-    
+
     try {
       console.log('Entering Repository Layer');
       const result = await this.dishesById(dishesId);
@@ -268,7 +268,7 @@ export class UserRepository extends BaseRepository<User> implements IUserReposit
       throw new Error(`Repository Error - Fetching by ID: ${error}`);
     }
   }
-  
+
 
   async getBookingDetail(id: string) {
     try {
@@ -286,7 +286,7 @@ export class UserRepository extends BaseRepository<User> implements IUserReposit
 
 
 
-  
+
 
   async updateBookingStatus(bookingData: any) {
     try {
@@ -418,17 +418,17 @@ export class UserRepository extends BaseRepository<User> implements IUserReposit
     }
   }
 
-async updatePasswordInDatabase (email: string, hashedPassword: string) {
+  async updatePasswordInDatabase(email: string, hashedPassword: string) {
     const user = await UserModel.findOneAndUpdate(
       { email },
       { password: hashedPassword },
       { new: true }
     );
-  
+
     if (!user) {
       throw new Error('User not found');
     }
-  
+
     return user;
   };
 
@@ -497,7 +497,7 @@ async updatePasswordInDatabase (email: string, hashedPassword: string) {
 
 
   async updateVendorRating(vendorId: string, averageRating: number): Promise<any | null> {
-    console.log('updateVendorRating',averageRating,vendorId);
+    console.log('updateVendorRating', averageRating, vendorId);
 
     try {
       const updatedVendor = await VendorModel.findByIdAndUpdate(
@@ -528,12 +528,39 @@ async updatePasswordInDatabase (email: string, hashedPassword: string) {
   }
 
 
-
-  
-  
   async saveBooking(bookingData: any): Promise<any> {
     try {
-      console.log('sanooj');
+      console.log('Booking Data:', bookingData);
+  
+      // Convert udf4 and udf7 into Date objects
+      const startDate = new Date(bookingData.udf4);
+      const endDate = new Date(bookingData.udf7);
+  
+      if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+        throw new Error('Invalid date format for udf4 or udf7');
+      }
+  
+      console.log('Start Date:', startDate);
+      console.log('End Date:', endDate);
+  
+      const formattedStartDate = startDate.toISOString().split('T')[0];
+      console.log('Formatted Start Date:', formattedStartDate);
+  
+      // Check if the slot is already booked
+      const availableSlot = await bookedModel
+        .findOne({
+          vendorId: bookingData.productinfo,
+          paymentStatus: "success",
+          StartingDate: startDate,
+        })
+        .exec();
+  
+      console.log('Available Slot:', availableSlot);
+  
+      if (availableSlot) {
+        throw new Error('The selected dates are already booked.');
+      }
+  
       const newBooking = new bookedModel({
         vendorId: bookingData.productinfo,
         userId: bookingData.udf1,
@@ -541,24 +568,59 @@ async updatePasswordInDatabase (email: string, hashedPassword: string) {
         paymentType: "online",
         paymentStatus: bookingData.paymentStatus,
         txnId: bookingData.txnid || null,
-        StartingDate: bookingData.udf4,
-        EndingDate: bookingData.udf7,
+        StartingDate: startDate,
+        EndingDate: endDate,
         eventType: bookingData.udf6,
         category: bookingData.udf5,
         occupancy: bookingData.occupancy,
         dishesId: bookingData.udf3 !== "nil" ? bookingData.udf3 : null,
-         auditoriumId: bookingData.udf2 !== "nil" ? bookingData.udf2 : null,
+        auditoriumId: bookingData.udf2 !== "nil" ? bookingData.udf2 : null,
       });
-
+  
       const savedBooking = await newBooking.save();
-      console.log('akil----------------------------------');
-      
+  
+      console.log('Booking saved successfully:', savedBooking);
       return savedBooking;
-    } catch (error) {
-      console.error('Error saving booking:', error);
-      throw new Error('Error saving booking');
+  
+    } catch (error: any) {
+      console.error('Error saving booking:', error.message);
+      throw new Error(error.message || 'Error saving booking');
     }
   }
+  
+
+
+
+
+
+  // async saveBooking(bookingData: any): Promise<any> {
+  //   try {
+  //     console.log('sanooj');
+  //     const newBooking = new bookedModel({
+  //       vendorId: bookingData.productinfo,
+  //       userId: bookingData.udf1,
+  //       totalAmount: bookingData.amount,
+  //       paymentType: "online",
+  //       paymentStatus: bookingData.paymentStatus,
+  //       txnId: bookingData.txnid || null,
+  //       StartingDate: bookingData.udf4,
+  //       EndingDate: bookingData.udf7,
+  //       eventType: bookingData.udf6,
+  //       category: bookingData.udf5,
+  //       occupancy: bookingData.occupancy,
+  //       dishesId: bookingData.udf3 !== "nil" ? bookingData.udf3 : null,
+  //        auditoriumId: bookingData.udf2 !== "nil" ? bookingData.udf2 : null,
+  //     });
+
+  //     const savedBooking = await newBooking.save();
+  //     console.log('akil----------------------------------');
+
+  //     return savedBooking;
+  //   } catch (error) {
+  //     console.error('Error saving booking:', error);
+  //     throw new Error('Error saving booking');
+  //   }
+  // }
 
 
 

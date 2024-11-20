@@ -47,5 +47,7 @@ router.get("/slots/:vendorId", vendorController.getSlotsByWorkerController.bind(
 
 
 router.post("/serviceImage", vendorController.uploadVendorImages.bind(vendorController))
+router.post("/dateAvailability", vendorController.checkDateAvailability.bind(vendorController));
+
 
 export default router;
