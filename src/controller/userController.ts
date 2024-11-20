@@ -3,26 +3,87 @@ import { otpGenerator } from "../utils/otpGenerator";
 import { sendEmail } from "../utils/sendEmail";
 import { HttpStatus } from '../utils/httpStatus'
 
+
 export class UserController {
   private userService
   constructor(userService: any) {
     this.userService = userService
   }
 
+//  
+
+  // async login(req: Request, res: Response, next: NextFunction) {
+  //   try {
+  //     const { email, password } = req.body;
+  //     const { user, token } = await this.userService.loginUser(email, password);
+  //     res.cookie("token", token, {
+  //       sameSite: 'strict',
+  //       maxAge: 3600000,
+  //     });
+  //     res.status(HttpStatus.OK).json({ user, token });
+  //   } catch (error: any) {
+  //     next(error.message);
+  //   }
+  // }
+
 
   async login(req: Request, res: Response, next: NextFunction) {
     try {
       const { email, password } = req.body;
-      const { user, token } = await this.userService.loginUser(email, password);
-      res.cookie("token", token, {
-        sameSite: 'strict',
-        maxAge: 3600000,
+      const { user, accessToken, refreshToken } = await this.userService.loginUser(email, password);
+      res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        sameSite: "strict",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
       });
-      res.status(HttpStatus.OK).json({ user, token });
+
+      res.cookie("token", accessToken, {
+        httpOnly: false,
+        sameSite: "strict",
+        maxAge: 1 * 60 * 60 * 1000,
+      });
+      res.status(HttpStatus.OK).json({ user, accessToken });
     } catch (error: any) {
-      next(error.message);
+      next(error);
     }
   }
+
+
+
+
+  async logoutController(req: Request, res: Response, next: NextFunction) {
+    try {
+      
+      res.clearCookie("refreshToken.Vendor", {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'strict',
+        path: '/',
+      });
+      res.clearCookie("refreshToken.User", {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'strict',
+        path: '/',
+      });
+        return res.status(200).json({ success: true, message: "Logged out successfully" });
+    } catch (error) {
+      console.error("Error in logoutController:", error);
+      next(error); 
+    }
+  }
+  
+
+
+
+
+
+
+
+
+
+
+
 
 
   async verifyOtp(req: Request, res: Response, next: NextFunction) {

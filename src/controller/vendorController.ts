@@ -69,17 +69,32 @@ export class VendorController {
     }
   }
 
+ 
+
   async login(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { email, password } = req.body;
-      const { vendor, vendorToken } = await this.vendorService.loginVendor(email, password);
-      res.cookie("vendorToken", vendorToken,);
-      res.status(HttpStatus.OK).json({ vendor, vendorToken });
-    } catch (error: any) {
+  
+      const { vendor, accessToken, refreshToken } = await this.vendorService.loginVendor(email, password);
+  
+      res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        sameSite: "strict",
+        maxAge: 7 * 24 * 60 * 60 * 1000, 
+      });
+  
+      res.cookie("vendorToken", accessToken, {
+        httpOnly: false,
+        sameSite: "strict",
+        maxAge: 1 * 60 * 60 * 1000, 
+      });
+  
+      res.status(200).json({ vendor, accessToken, refreshToken });
+    } catch (error) {
       next(error);
     }
   }
-
+  
 
   async fetchAddress(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {

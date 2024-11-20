@@ -36,7 +36,7 @@ export class VendorRepository implements IVendorRepository {
       return VendorModel.findOne({ email });
     } catch (error) {
       console.error(error);
-
+      throw new Error( "Failed to login");
     }
   }
 

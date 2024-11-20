@@ -8,7 +8,7 @@ import { ISlot } from "../interfaces/slot";
 
 import { IUserRepository } from "../interfaces/repository/userRepository";
 import { log } from "winston";
-import { generateAccessToken } from "../utils/generateJWT";
+import { generateAccessToken, generateRefreshToken } from "../utils/generateJWT";
 
 
 export class UserService {
@@ -45,26 +45,49 @@ export class UserService {
 
 
 
+  // async loginUser(email: string, password: string) {
+  //   try {
+  //     const user = await this.userRepository.findUserByEmail(email);
+
+  //     if (!user) {
+  //       throw new Error("Invalid Email/Password");
+  //     }
+
+  //     const isPasswordValid = await bcrypt.compare(password, user.password);
+  //     if (!isPasswordValid) {
+  //       throw new Error("Invalid Email/Password");
+  //     }
+  //     const accessToken = generateAccessToken(user._id, "user");
+  //     const refreshToken = generateRefreshToken(user._id, "user");
+  //     return { user, token };
+  //   } catch (error: any) {
+  //     console.error('Error during login:', error);
+  //     throw new Error(error.message);
+  //   }
+  // }
+
+
   async loginUser(email: string, password: string) {
     try {
       const user = await this.userRepository.findUserByEmail(email);
-
+  
       if (!user) {
-        throw new Error("Invalid Email/Password");
+        throw new Error("Invalid Password");
       }
-
-      const isPasswordValid = await bcrypt.compare(password, user.password);
+        const isPasswordValid = await bcrypt.compare(password, user.password);
       if (!isPasswordValid) {
-        throw new Error("Invalid Email/Password");
+        throw new Error("Invalid Password");
       }
-      const accessToken = generateAccessToken(user._id, "user");
+        const accessToken = generateAccessToken(user._id, "user");
       const refreshToken = generateRefreshToken(user._id, "user");
-      return { user, token };
+  
+      return { user, accessToken, refreshToken };
     } catch (error: any) {
-      console.error('Error during login:', error);
+      console.error("Error during login:", error);
       throw new Error(error.message);
     }
   }
+  
 
 
 
@@ -657,8 +680,4 @@ async  updatePasswordService  (email: string, newPassword: string)  {
 
 
 
-
-function generateRefreshToken(_id: any, arg1: string) {
-  throw new Error("Function not implemented.");
-}
 

@@ -1,23 +1,15 @@
 import jwt from "jsonwebtoken";
 
+// Generate Access Token
 export function generateAccessToken(id: string, role: string): string {
-  try {
-    const payload = { id, role };
-    const options = { expiresIn: "1h" }; 
-    return jwt.sign(payload, ({ userId: user._id }, process.env.JWT_SECRET!, }), options);
-  } catch (error: any) {
-    throw new Error(error.message);
-  }
+  const payload = { id, role };
+  const options = { expiresIn: "1h" }; // Access token valid for 1 hour
+  return jwt.sign(payload, process.env.JWT_SECRET!, options);
 }
 
+// Generate Refresh Token
 export function generateRefreshToken(id: string, role: string): string {
-  try {
-    const payload = { id, role };
-    const options = { expiresIn: "7d" }; 
-    return jwt.sign({ userId: user._id }, process.env.JWT_SECRET!, {
-        
-      }options);
-  } catch (error: any) {
-    throw new Error(error.message);
-  }
+  const payload = { id, role };
+  const options = { expiresIn: "7d" }; // Refresh token valid for 7 days
+  return jwt.sign(payload, process.env.JWT_REFRESH_SECRET!, options);
 }

@@ -5,6 +5,7 @@ import { AuditoriumDocument } from "../models/auditoriumModel";
 import { IVendorRepository } from "../interfaces/repository/vendorRepository";
 import { IVendorService } from "../interfaces/service/vendorService";
 import { ISlot } from "../interfaces/slot";
+import { generateAccessToken, generateRefreshToken } from "../utils/generateJWT";
 
 
 export class VendorService implements IVendorService {
@@ -51,28 +52,31 @@ export class VendorService implements IVendorService {
 
   }
 
+
   async loginVendor(email: string, password: string) {
     try {
       const vendor = await this.vendorRepository.findVendorByEmail(email);
+      console.log(vendor,'vendor');
+      
       if (!vendor) {
         throw new Error("Invalid Email/Password");
       }
 
-      const vendorToken = jwt.sign(
-        { vendorId: vendor._id },
-
-        process.env.JWT_SECRET!,
-        {
-          expiresIn: "1h",
-        }
-      );
-      return { vendor, vendorToken };
+  
+      // const isPasswordValid = await bcrypt.compare(password, vendor.password);
+      // if (password!== vendor.password) {
+      //   throw new Error("Invalid Password");
+      // }
+  
+      const accessToken = generateAccessToken(vendor._id, "vendorToken");
+      const refreshToken = generateRefreshToken(vendor._id, "vendorToken");
+  
+      return { vendor, accessToken, refreshToken };
     } catch (error) {
-      throw new Error('Failed to fetch vendor addresses');
-
+      throw new Error("Failed to login");
     }
   }
-
+  
 
 
   async vendorAddress() {
@@ -416,6 +420,7 @@ export class VendorService implements IVendorService {
 
 
 }
+
 
 
 
