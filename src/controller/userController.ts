@@ -36,14 +36,14 @@ export class UserController {
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
         secure: true,
-        sameSite: "strict",
+        sameSite: "none",
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
 
       res.cookie("token", accessToken, {
         httpOnly: false,
         secure: true,
-        sameSite: "strict",
+        sameSite: "none",
         maxAge: 1 * 60 * 60 * 1000,
       });
       res.status(HttpStatus.OK).json({ user, accessToken });
