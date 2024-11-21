@@ -63,13 +63,12 @@ export class UserController {
       res.clearCookie("refreshToken", {
         httpOnly: true,
         sameSite: "strict",
-        path: "/", // Explicitly match the path used when setting the cookie
+        path: "/", 
         secure: true,
       });
       console.log('22222222222222');
 
-      // If there are other cookies to clear, clear them similarly
-      res.clearCookie("refreshToken.User", {
+      res.clearCookie("token", {
         httpOnly: true,
         sameSite: "strict",
         path: "/",
