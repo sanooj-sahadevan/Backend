@@ -33,19 +33,38 @@ export class UserController {
 
       const { email, password } = req.body;
       const { user, accessToken, refreshToken } = await this.userService.loginUser(email, password);
+
+
+      // res.cookie("refreshToken", refreshToken, {
+      //   httpOnly: true,
+      //   secure: true,
+      //   sameSite: "none",
+      //   maxAge: 7 * 24 * 60 * 60 * 1000,
+      // });
+
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
         secure: true,
-        sameSite: "none",
-        maxAge: 7 * 24 * 60 * 60 * 1000,
+        sameSite: "strict", // Use "none" if the frontend and backend are on different origins.
+        domain: ".eventopia.shop", // Notice the dot prefix for subdomain support.
+        maxAge: 7 * 24 * 60 * 60 * 1000, 
       });
+      
 
       res.cookie("token", accessToken, {
-        httpOnly: false,
+        httpOnly: true,
         secure: true,
-        sameSite: "none",
+        sameSite: "strict", // Use "none" if the frontend and backend are on different origins.
+        domain: ".eventopia.shop", // Notice the dot prefix for subdomain support.
         maxAge: 1 * 60 * 60 * 1000,
       });
+      
+      // res.cookie("token", accessToken, {
+      //   httpOnly: false,
+      //   secure: true,
+      //   sameSite: "none",
+      //   maxAge: 1 * 60 * 60 * 1000,
+      // });
       res.status(HttpStatus.OK).json({ user, accessToken });
     } catch (error: any) {
       next(error);
