@@ -76,31 +76,31 @@ export class UserController {
 
   async logoutController(req: Request, res: Response, next: NextFunction) {
     try {
-      console.log('1111111111111');
-
-      // Clear the refresh token cookie with matching options
-      res.clearCookie("refreshToken", {
+      console.log('Logging out, clearing cookies...');
+        res.clearCookie("refreshToken", {
         httpOnly: true,
-        sameSite: "strict",
+        secure: true, // Ensure this is true for production
+        sameSite: "strict", // Use "None" for cross-origin
+        domain: ".eventopia.shop", // Ensure this matches your domain/subdomain
         path: "/", 
-        secure: true,
       });
-      console.log('22222222222222');
-
+      console.log('refreshToken cleared');
+  
       res.clearCookie("token", {
         httpOnly: true,
-        sameSite: "strict",
+        secure: true, // Ensure this is true for production
+        sameSite: "strict", // Use "None" for cross-origin
+        domain: ".eventopia.shop", // Ensure this matches your domain/subdomain
         path: "/",
-        secure: true,
       });
-
-      return res.status(200).json({ success: true, message: "Logged out successfully" });
+      console.log('token cleared');
+        return res.status(200).json({ success: true, message: "Logged out successfully" });
     } catch (error) {
       console.error("Error in logoutController:", error);
       next(error);
     }
   }
-
+  
 
 
 
