@@ -10,7 +10,7 @@ export class UserController {
     this.userService = userService
   }
 
-//  
+  //  
 
   // async login(req: Request, res: Response, next: NextFunction) {
   //   try {
@@ -29,6 +29,8 @@ export class UserController {
 
   async login(req: Request, res: Response, next: NextFunction) {
     try {
+      console.log('login daaa');
+
       const { email, password } = req.body;
       const { user, accessToken, refreshToken } = await this.userService.loginUser(email, password);
       res.cookie("refreshToken", refreshToken, {
@@ -53,26 +55,36 @@ export class UserController {
 
   async logoutController(req: Request, res: Response, next: NextFunction) {
     try {
-      
-      res.clearCookie("refreshToken.Vendor", {
+      console.log('1111111111111');
+
+      // Clear the refresh token cookie with matching options
+      res.clearCookie("refreshToken", {
         httpOnly: true,
-        secure: true,
-        sameSite: 'strict',
-        path: '/',
+        sameSite: "strict",
+        path: "/", // Explicitly match the path used when setting the cookie
+        secure: process.env.NODE_ENV === "production", // Use secure only in production
       });
+      console.log('22222222222222');
+
+      // If there are other cookies to clear, clear them similarly
       res.clearCookie("refreshToken.User", {
         httpOnly: true,
-        secure: true,
-        sameSite: 'strict',
-        path: '/',
+        sameSite: "strict",
+        path: "/",
+        secure: process.env.NODE_ENV === "production",
       });
-        return res.status(200).json({ success: true, message: "Logged out successfully" });
+
+      return res.status(200).json({ success: true, message: "Logged out successfully" });
     } catch (error) {
       console.error("Error in logoutController:", error);
-      next(error); 
+      next(error);
     }
   }
-  
+
+
+
+
+
 
 
 

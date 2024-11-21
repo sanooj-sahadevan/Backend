@@ -65,12 +65,12 @@ export class VendorService implements IVendorService {
   
       // const isPasswordValid = await bcrypt.compare(password, vendor.password);
       // if (password!== vendor.password) {
-      //   throw new Error("Invalid Password");
+      //   throw new Error("Invalid Password");xxxx
       // }
   
       const accessToken = generateAccessToken(vendor._id, "vendorToken");
       const refreshToken = generateRefreshToken(vendor._id, "vendorToken");
-  
+
       return { vendor, accessToken, refreshToken };
     } catch (error) {
       throw new Error("Failed to login");
