@@ -35,12 +35,14 @@ export class UserController {
       const { user, accessToken, refreshToken } = await this.userService.loginUser(email, password);
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
+        secure: process.env.NODE_ENV === 'production', // Ensures it's sent over HTTPS in production
         sameSite: "strict",
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
 
       res.cookie("token", accessToken, {
         httpOnly: false,
+        secure: process.env.NODE_ENV === 'production', // Ensures it's sent over HTTPS in production
         sameSite: "strict",
         maxAge: 1 * 60 * 60 * 1000,
       });
