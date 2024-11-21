@@ -5,7 +5,7 @@ import { AuditoriumDocument } from "../models/auditoriumModel";
 import { IVendorRepository } from "../interfaces/repository/vendorRepository";
 import { IVendorService } from "../interfaces/service/vendorService";
 import { ISlot } from "../interfaces/slot";
-import { generateAccessToken, generateRefreshToken } from "../utils/generateJWT";
+import {  generateVendorAccessToken, generatevendorRefreshToken } from "../utils/generateJWT";
 
 
 export class VendorService implements IVendorService {
@@ -68,8 +68,8 @@ export class VendorService implements IVendorService {
       //   throw new Error("Invalid Password");xxxx
       // }
   
-      const accessToken = generateAccessToken(vendor._id, "vendorToken");
-      const refreshToken = generateRefreshToken(vendor._id, "vendorToken");
+      const accessToken = generateVendorAccessToken(vendor._id, "vendorToken");
+      const refreshToken = generatevendorRefreshToken(vendor._id, "vendorToken");
 
       return { vendor, accessToken, refreshToken };
     } catch (error) {
