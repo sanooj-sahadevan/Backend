@@ -35,7 +35,6 @@ export class UserController {
       const { user, accessToken, refreshToken } = await this.userService.loginUser(email, password);
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
-        // secure: process.env.NODE_ENV === 'production', // Ensures it's sent over HTTPS in production
         secure: true,
         sameSite: "strict",
         maxAge: 7 * 24 * 60 * 60 * 1000,
@@ -43,7 +42,6 @@ export class UserController {
 
       res.cookie("token", accessToken, {
         httpOnly: false,
-        // secure: process.env.NODE_ENV === 'production', // Ensures it's sent over HTTPS in production
         secure: true,
         sameSite: "strict",
         maxAge: 1 * 60 * 60 * 1000,
@@ -66,7 +64,7 @@ export class UserController {
         httpOnly: true,
         sameSite: "strict",
         path: "/", // Explicitly match the path used when setting the cookie
-        secure: process.env.NODE_ENV === "production", // Use secure only in production
+        secure: true,
       });
       console.log('22222222222222');
 
@@ -75,7 +73,7 @@ export class UserController {
         httpOnly: true,
         sameSite: "strict",
         path: "/",
-        secure: process.env.NODE_ENV === "production",
+        secure: true,
       });
 
       return res.status(200).json({ success: true, message: "Logged out successfully" });
