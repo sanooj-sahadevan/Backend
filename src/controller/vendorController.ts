@@ -74,26 +74,72 @@ export class VendorController {
   async login(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { email, password } = req.body;
-  
       const { vendor, accessToken, refreshToken } = await this.vendorService.loginVendor(email, password);
   
-      res.cookie("refreshToken", refreshToken, {
+      res.cookie("vendorRefreshToken", refreshToken, {
         httpOnly: true,
+        secure: true,
         sameSite: "strict",
+        domain: ".eventopia.shop", 
         maxAge: 7 * 24 * 60 * 60 * 1000, 
       });
-  
+
       res.cookie("vendorToken", accessToken, {
-        httpOnly: false,
+        httpOnly: true,
+        secure: true,
         sameSite: "strict",
-        maxAge: 1 * 60 * 60 * 1000, 
+        domain: ".eventopia.shop",
+        maxAge: 1 * 60 * 60 * 1000,
       });
+  
+      // res.cookie("vendorToken", accessToken, {
+      //   httpOnly: false,
+      //   sameSite: "strict",
+      //   maxAge: 1 * 60 * 60 * 1000, 
+      // });
   
       res.status(200).json({ vendor, accessToken, refreshToken });
     } catch (error) {
       next(error);
     }
   }
+
+
+  async logoutController(req: Request, res: Response, next: NextFunction) {
+    try {
+      console.log('Logging out, clearing cookies...');
+        res.clearCookie("vendorRefreshToken", {
+        httpOnly: true,
+        secure: true, 
+        sameSite: "strict", 
+        domain: ".eventopia.shop", 
+        path: "/", 
+      });
+      console.log('refreshToken cleared');
+  
+      res.clearCookie("vendorToken", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+        domain: ".eventopia.shop", 
+        path: "/",
+      });
+      console.log('token cleared');
+        return res.status(200).json({ success: true, message: "Logged out successfully" });
+    } catch (error) {
+      console.error("Error in logoutController:", error);
+      next(error);
+    }
+  }
+
+
+
+
+
+
+
+
+
   
 
   async fetchAddress(req: Request, res: Response, next: NextFunction): Promise<void> {

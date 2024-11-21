@@ -17,6 +17,7 @@ const vendorController = new VendorController(vendorService)
 router.post("/signup", vendorController.register.bind(vendorController));
 router.post("/verifyOtp", vendorController.verifyOtp.bind(vendorController));
 router.post("/login", vendorController.login.bind(vendorController));
+router.post('/logout', vendorController.logoutController.bind(vendorController));
 
 // vndor Dashboard
 router.patch('/editVendorDetails', upload.single('image'), vendorController.editVendorDetails.bind(vendorController));

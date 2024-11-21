@@ -45,8 +45,8 @@ export class UserController {
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
         secure: true,
-        sameSite: "strict", // Use "none" if the frontend and backend are on different origins.
-        domain: ".eventopia.shop", // Notice the dot prefix for subdomain support.
+        sameSite: "strict",
+        domain: ".eventopia.shop", 
         maxAge: 7 * 24 * 60 * 60 * 1000, 
       });
       
@@ -54,8 +54,8 @@ export class UserController {
       res.cookie("token", accessToken, {
         httpOnly: true,
         secure: true,
-        sameSite: "strict", // Use "none" if the frontend and backend are on different origins.
-        domain: ".eventopia.shop", // Notice the dot prefix for subdomain support.
+        sameSite: "strict",
+        domain: ".eventopia.shop",
         maxAge: 1 * 60 * 60 * 1000,
       });
       
@@ -79,18 +79,18 @@ export class UserController {
       console.log('Logging out, clearing cookies...');
         res.clearCookie("refreshToken", {
         httpOnly: true,
-        secure: true, // Ensure this is true for production
-        sameSite: "strict", // Use "None" for cross-origin
-        domain: ".eventopia.shop", // Ensure this matches your domain/subdomain
+        secure: true, 
+        sameSite: "strict", 
+        domain: ".eventopia.shop", 
         path: "/", 
       });
       console.log('refreshToken cleared');
   
       res.clearCookie("token", {
         httpOnly: true,
-        secure: true, // Ensure this is true for production
-        sameSite: "strict", // Use "None" for cross-origin
-        domain: ".eventopia.shop", // Ensure this matches your domain/subdomain
+        secure: true,
+        sameSite: "strict",
+        domain: ".eventopia.shop", 
         path: "/",
       });
       console.log('token cleared');
@@ -101,22 +101,6 @@ export class UserController {
     }
   }
   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   async verifyOtp(req: Request, res: Response, next: NextFunction) {
     try {
