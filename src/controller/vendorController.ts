@@ -85,7 +85,7 @@ export class VendorController {
       });
 
       res.cookie("vendorToken", accessToken, {
-        httpOnly: false,
+        httpOnly: true,
         secure: true,
         sameSite: "strict",
         domain: ".eventopia.shop",
@@ -108,7 +108,7 @@ export class VendorController {
   async logoutController(req: Request, res: Response, next: NextFunction) {
     try {
       console.log('Logging out, clearing cookies...');
-      res.clearCookie("vendorRefreshToken", {
+      res.clearCookie("RefreshToken", {
         httpOnly: true,
         secure: true,
         sameSite: "strict",
