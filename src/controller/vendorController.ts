@@ -69,35 +69,35 @@ export class VendorController {
     }
   }
 
- 
+
 
   async login(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { email, password } = req.body;
       const { vendor, accessToken, refreshToken } = await this.vendorService.loginVendor(email, password);
-  
-      res.cookie("vendorRefreshToken", refreshToken, {
+
+      res.cookie("RefreshToken", refreshToken, {
         httpOnly: true,
         secure: true,
         sameSite: "strict",
-        domain: ".eventopia.shop", 
-        maxAge: 7 * 24 * 60 * 60 * 1000, 
+        domain: ".eventopia.shop",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
       });
 
       res.cookie("vendorToken", accessToken, {
-        httpOnly: true,
+        httpOnly: false,
         secure: true,
         sameSite: "strict",
         domain: ".eventopia.shop",
         maxAge: 1 * 60 * 60 * 1000,
       });
-  
+
       // res.cookie("vendorToken", accessToken, {
       //   httpOnly: false,
       //   sameSite: "strict",
       //   maxAge: 1 * 60 * 60 * 1000, 
       // });
-  
+
       res.status(200).json({ vendor, accessToken, refreshToken });
     } catch (error) {
       next(error);
@@ -108,24 +108,24 @@ export class VendorController {
   async logoutController(req: Request, res: Response, next: NextFunction) {
     try {
       console.log('Logging out, clearing cookies...');
-        res.clearCookie("vendorRefreshToken", {
+      res.clearCookie("vendorRefreshToken", {
         httpOnly: true,
-        secure: true, 
-        sameSite: "strict", 
-        domain: ".eventopia.shop", 
-        path: "/", 
+        secure: true,
+        sameSite: "strict",
+        domain: ".eventopia.shop",
+        path: "/",
       });
       console.log('refreshToken cleared');
-  
+
       res.clearCookie("vendorToken", {
         httpOnly: true,
         secure: true,
         sameSite: "strict",
-        domain: ".eventopia.shop", 
+        domain: ".eventopia.shop",
         path: "/",
       });
       console.log('token cleared');
-        return res.status(200).json({ success: true, message: "Logged out successfully" });
+      return res.status(200).json({ success: true, message: "Logged out successfully" });
     } catch (error) {
       console.error("Error in logoutController:", error);
       next(error);
@@ -140,7 +140,7 @@ export class VendorController {
 
 
 
-  
+
 
   async fetchAddress(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
@@ -155,7 +155,7 @@ export class VendorController {
   async editVendorDetails(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       console.log('edit vendor controller');
-      
+
       const userDetails = req.body;
       const updatedUser = await this.vendorService.editVendorService(userDetails);
       res.status(HttpStatus.OK).json(updatedUser);
@@ -210,7 +210,7 @@ export class VendorController {
     try {
 
       console.log('hey hey hey hey hy hey ehy ehye hey ehy hey hey ');
-      
+
       const { fileName, fileType } = req.query;
       if (!fileName || !fileType) {
         return res.status(400).json({ error: "fileName and fileType are required" });
@@ -299,7 +299,7 @@ export class VendorController {
   async fetchReviews(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       console.log('review controller');
-      
+
       const { vendorId } = req.params;
       const Reviews = await this.vendorService.findReviewsVendorById(vendorId);
       if (!Reviews || Reviews.length === 0) {
@@ -430,8 +430,8 @@ export class VendorController {
 
   async createSlotController(req: Request, res: Response, next: NextFunction): Promise<any> {
     try {
-      const { startDate, endDate } = req.body; 
-      const { vendorId } = req.params; 
+      const { startDate, endDate } = req.body;
+      const { vendorId } = req.params;
       if (!startDate || !endDate) {
         return res.status(400).json({ message: "Start and End dates are required" });
       }
@@ -459,8 +459,8 @@ export class VendorController {
     try {
       const vendorId = req.params.vendorId; // Get vendorId from route parameters
       const slots = await this.vendorService.getSlotsByWorkerId(vendorId);
-      console.log(slots,"heycontroller");
-      
+      console.log(slots, "heycontroller");
+
       res.status(200).json(slots);
     } catch (error: any) {
       console.error("Error fetching slots:", error);
@@ -484,21 +484,21 @@ export class VendorController {
     }
   }
 
-  async  checkDateAvailability  (req: Request, res: Response)  {
+  async checkDateAvailability(req: Request, res: Response) {
     const { vendorId, startingDate, endingDate } = req.body;
 
     if (!vendorId || !startingDate || !endingDate) {
-        return res.status(400).json({ message: "Invalid input data" });
+      return res.status(400).json({ message: "Invalid input data" });
     }
 
     try {
-        const isAvailable = await this.vendorService.isDateRangeAvailable(vendorId, new Date(startingDate), new Date(endingDate));
-        res.status(200).json({ isAvailable });
+      const isAvailable = await this.vendorService.isDateRangeAvailable(vendorId, new Date(startingDate), new Date(endingDate));
+      res.status(200).json({ isAvailable });
     } catch (error) {
-        console.error("Error in controller:", error);
-        res.status(500).json({ message: "Error checking date availability" });
+      console.error("Error in controller:", error);
+      res.status(500).json({ message: "Error checking date availability" });
     }
-}
+  }
 
 
 

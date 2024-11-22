@@ -52,7 +52,7 @@ export class UserController {
       
 
       res.cookie("token", accessToken, {
-        httpOnly: true,
+        httpOnly: false,
         secure: true,
         sameSite: "strict",
         domain: ".eventopia.shop",
