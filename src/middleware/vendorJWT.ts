@@ -16,8 +16,8 @@ export function verifyVendor(req: any, res: Response, next: NextFunction) {
 
   try {
     const decoded: any = jwt.verify(vendorToken, secret);
-    req.vendorId = decoded.vendorId;
-    console.log(decoded,'ooooooooooooooooooo');
+    req.id = decoded.id; // Attach id to the request object
+    console.log(decoded, "Decoded JWT");
 
     next();
   } catch (err: any) {
@@ -25,6 +25,7 @@ export function verifyVendor(req: any, res: Response, next: NextFunction) {
     return res.status(HttpStatus.UNAUTHORIZED).json({ error: "Invalid JWT" });
   }
 }
+
 
 
 // import { Request, Response, NextFunction } from 'express';

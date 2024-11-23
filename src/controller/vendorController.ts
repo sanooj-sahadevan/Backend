@@ -229,7 +229,7 @@ export class VendorController {
     try {
       console.log("Starting to add dishes...");
   
-      const vendorId = (req as any).id; 
+      const vendorId = (req as any).id; // Access id added by middleware
       const { body } = req;
   
       console.log("Vendor ID:", vendorId);
