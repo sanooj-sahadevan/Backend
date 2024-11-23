@@ -92,7 +92,7 @@ export class VendorController {
         maxAge: 1 * 60 * 60 * 1000,
       });
 
-      // res.cookie("vendorToken", accessToken, {
+      // res.cookie("RefreshToken", accessToken, {
       //   httpOnly: false,
       //   sameSite: "strict",
       //   maxAge: 1 * 60 * 60 * 1000, 
@@ -232,12 +232,17 @@ export class VendorController {
 
   async addDishes(req: Request, res: Response, next: NextFunction) {
     try {
+      console.log('1');
+
       const { body } = req;
+      console.log('2');
       const vendorId = (req as any).vendorId;
-      console.log("Request Body: ", body);  // Add this line to check the body
+      console.log('3',vendorId);
+      console.log("Request Body: ",); 
       if (!vendorId) {
         return res.status(HttpStatus.BAD_REQUEST).json({ error: "Vendor ID is required" });
       }
+      console.log('4');
 
       await this.vendorService.uploadDishes(vendorId, body, body.image);
       return res.status(HttpStatus.OK).json("Dishes added successfully");

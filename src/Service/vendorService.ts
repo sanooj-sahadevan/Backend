@@ -56,17 +56,17 @@ export class VendorService implements IVendorService {
     try {
       const vendor = await this.vendorRepository.findVendorByEmail(email);
       console.log(vendor, 'vendor');
-console.log(vendor);
-console.log(vendor.password);
-console.log(vendor.vendorname);
+      console.log(vendor);
+      console.log(vendor.password);
+      console.log(vendor.vendorname);
 
 
 
       if (!vendor) {
         throw new Error("Invalid Email/Password");
       }
-      console.log(password,'okpas');
-      console.log(email,'ok email');
+      console.log(password, 'okpas');
+      console.log(email, 'ok email');
 
 
 
@@ -167,8 +167,12 @@ console.log(vendor.vendorname);
 
   async uploadDishes(vendorId: any, data: any, images?: string) {
     try {
+      console.log('service 1');
+
       data.price = Number(data.price);
+      console.log('service 2');
       const dishesData = { vendorId, data, images };
+      console.log('service 3');
       console.log("Dishes Data: ", dishesData);
 
       const newDish = await this.vendorRepository.createDishes(dishesData);

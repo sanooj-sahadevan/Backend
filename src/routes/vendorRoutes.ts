@@ -1,6 +1,6 @@
 import { Router } from "express";
 import upload from "../middleware/multer";
-import { verifyvendor } from "../middleware/vendorJWT";
+import { verifyVendor } from "../middleware/vendorJWT";
 import { VendorController } from "../controller/vendorController";
 import { VendorRepository } from "../Repository/vendorRepo";
 import { VendorService } from "../Service/vendorService";
@@ -21,8 +21,8 @@ router.post('/logout', vendorController.logoutController.bind(vendorController))
 
 // vndor Dashboard
 router.patch('/editVendorDetails', upload.single('image'), vendorController.editVendorDetails.bind(vendorController));
-router.post('/addDishes', verifyvendor, upload.single('image'), vendorController.addDishes.bind(vendorController));
-router.post('/addAuditorium', verifyvendor, upload.single('image'), vendorController.addAuditorium.bind(vendorController));
+router.post('/addDishes', verifyVendor, upload.single('image'), vendorController.addDishes.bind(vendorController));
+router.post('/addAuditorium', verifyVendor, upload.single('image'), vendorController.addAuditorium.bind(vendorController));
 
 
 router.get('/fetchDetailsVendor/:vendorId', vendorController.fetchDetailsVendor.bind(vendorController));
@@ -41,7 +41,7 @@ router.patch('/approveReview/:reviewId', vendorController.approveReview.bind(ven
 router.delete('/rejectReview/:reviewId', vendorController.rejectReview.bind(vendorController));
 
 router.get('/vendorBookingDetils/:vendorId', vendorController.vendorBookingDetils.bind(vendorController));
-router.get('/unread-count', verifyvendor, vendorController.getUnreadMessagesCount.bind(vendorController));
+router.get('/unread-count', verifyVendor, vendorController.getUnreadMessagesCount.bind(vendorController));
 
 router.post("/create-slot/:vendorId", vendorController.createSlotController.bind(vendorController));
 router.get("/slots/:vendorId", vendorController.getSlotsByWorkerController.bind(vendorController));
