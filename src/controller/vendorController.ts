@@ -225,32 +225,33 @@ export class VendorController {
   }
 
 
-
-
-
-
-
   async addDishes(req: Request, res: Response, next: NextFunction) {
     try {
-      console.log('1');
-
+      console.log("Starting to add dishes...");
+  
+      const vendorId = (req as any).vendorId; 
       const { body } = req;
-      console.log('2');
-      const vendorId = (req as any).vendorId;
-      console.log('3',vendorId);
-      console.log("Request Body: ",); 
+  
+      console.log("Vendor ID:", vendorId);
+      console.log("Request Body:", body);
+  
       if (!vendorId) {
         return res.status(HttpStatus.BAD_REQUEST).json({ error: "Vendor ID is required" });
       }
-      console.log('4');
-
+  
       await this.vendorService.uploadDishes(vendorId, body, body.image);
-      return res.status(HttpStatus.OK).json("Dishes added successfully");
+      return res.status(HttpStatus.OK).json({ message: "Dishes added successfully" });
     } catch (error) {
-      console.error("Error adding dishes: ", error);
+      console.error("Error adding dishes:", error);
       next(error);
     }
   }
+  
+
+
+
+
+  
 
 
   async addAuditorium(req: Request & { vendorId?: string }, res: Response, next: NextFunction) {
