@@ -228,17 +228,17 @@ export class VendorController {
   async addDishes(req: Request, res: Response, next: NextFunction) {
     try {
       console.log("Starting to add dishes...");
-
+  
       const vendorId = (req as any).id; // Access id added by middleware
       const { body } = req;
-
+  
       console.log("Vendor ID:", vendorId);
       console.log("Request Body:", body);
-
+  
       if (!vendorId) {
         return res.status(HttpStatus.BAD_REQUEST).json({ error: "Vendor ID is required" });
       }
-
+  
       await this.vendorService.uploadDishes(vendorId, body, body.image);
       return res.status(HttpStatus.OK).json({ message: "Dishes added successfully" });
     } catch (error) {
@@ -246,12 +246,12 @@ export class VendorController {
       next(error);
     }
   }
+  
 
 
 
 
-
-
+  
 
 
   async addAuditorium(req: Request & { vendorId?: string }, res: Response, next: NextFunction) {
@@ -290,8 +290,7 @@ export class VendorController {
 
   async fetchFoodDetails(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const vendorId = (req as any).id; // Access id added by middleware
-      const { body } = req;
+      const { vendorId } = req.params;
       const dishes = await this.vendorService.findFoodVendorById(vendorId);
       if (!dishes || dishes.length === 0) {
         res.status(HttpStatus.NOT_FOUND).json({ message: "No dishes found for this vendor" });
