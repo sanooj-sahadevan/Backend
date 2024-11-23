@@ -37,8 +37,9 @@ export class BaseRepository<T> {
     async getAll() {
         try {
             return await this.vendorModel.find().sort({ createdAt: -1 }).exec();
-        } catch (error) {
-            throw new Error(`Error fetching records from the database: ${error}`);
+        } catch (error:any) {
+            throw new Error(error);
+
         }
     }
 
@@ -48,8 +49,9 @@ export class BaseRepository<T> {
 
             const newUser = new UserModel(user);
             return await newUser.save();
-        } catch (error) {
-            throw new Error('Database Error');
+        } catch (error:any) {
+            throw new Error(error);
+
         }
     }
 
@@ -60,9 +62,9 @@ async userByEmail(email: string) {
         console.log('234567890');
         const user = await UserModel.findOne({ email, isBlocked: false }).exec();
         return user;
-    } catch (error) {
+    } catch (error:any) {
         console.error('Error finding user by email:', error);
-        throw new Error('Database Error');
+        throw new Error(error);
     }
 }
 
@@ -71,8 +73,8 @@ async userByEmail(email: string) {
     async userById(userId: string) {
         try {
             return UserModel.findById(userId);
-        } catch (error) {
-            throw new Error('Database Error');
+        } catch (error:any) {
+            throw new Error(error);
 
         }
     }
@@ -80,8 +82,8 @@ async userByEmail(email: string) {
     async updateUserBase(email: string, update: Partial<User>) {
         try {
             return UserModel.findOneAndUpdate({ email }, update, { new: true });
-        } catch (error) {
-            throw new Error('Database Error');
+        } catch (error:any) {
+            throw new Error(error);
         }
     }
 
@@ -93,10 +95,7 @@ async userByEmail(email: string) {
     async findVendorBase(vendorId: string) {
         return await VendorModel.findById(vendorId);
     }
-    // async updateBookingStatus(bookingData: any) {
-    //     const newBooking = await bookedModel.create({ ...bookingData });
-    //     return newBooking;
-    // }
+   
 
 
     async dishesById(dishesId: string) {
@@ -105,9 +104,9 @@ async userByEmail(email: string) {
     const result = await Dishes.findById(dishesId);
     console.log('Result:', result);
     return result;
-  } catch (error) {
-    throw new Error(`Database Error - Fetching dish: ${error}`);
-  }
+  } catch (error:any) {
+    throw new Error(error);
+}
 }
 
 

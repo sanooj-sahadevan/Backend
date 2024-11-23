@@ -34,7 +34,7 @@ const VendorSchema: Schema<Vendor> = new Schema({
     vendorname: { type: String, required: true },
     phone: { type: Number, required: true },
     email: { type: String, required: true, unique: true },
-    password: { type: String, required: [true, 'Password is required'], select: false },
+    password: { type: String, required: [true, 'Password is required'], select: true },
     profileImage: { type: String, default: '' },
     adminVerified: { type: Boolean, default: false },
     otp: { type: String, required: false },

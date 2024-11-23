@@ -42,9 +42,9 @@ export class UserRepository extends BaseRepository<User> implements IUserReposit
 
       const user = await this.userByEmail(email);
       return user;
-    } catch (error) {
+    } catch (error:any) {
       console.error('Error finding user by email:', error);
-      throw new Error('Database Error');
+      throw new Error(error);
     }
   }
 
@@ -58,17 +58,17 @@ export class UserRepository extends BaseRepository<User> implements IUserReposit
         return user;
       }
       throw new Error("Invalid OTP");
-    } catch (error) {
+    } catch (error:any) {
       console.error('Error saving user:', error);
-      throw new Error('Database Error');
+      throw new Error(error);
     }
   }
 
   async findUserById(userId: string) {
     try {
       return await this.userById(userId)
-    } catch (error) {
-      throw new Error('Database Error');
+    } catch (error:any) {
+      throw new Error(error);
 
     }
   }
@@ -92,9 +92,9 @@ export class UserRepository extends BaseRepository<User> implements IUserReposit
         await newUser.save();
         return newUser;
       }
-    } catch (error) {
-      console.error('Error updating user:', error);
-      throw new Error('Database operation failed');
+    } catch (error:any) {
+      throw new Error(error);
+
     }
   }
 
@@ -102,8 +102,9 @@ export class UserRepository extends BaseRepository<User> implements IUserReposit
   async updateUser(email: string, update: Partial<User>) {
     try {
       return this.updateUserBase(email, update)
-    } catch (error) {
-      throw new Error('Database Error');
+    } catch (error:any) {
+      throw new Error(error);
+
     }
   }
 
@@ -119,10 +120,8 @@ export class UserRepository extends BaseRepository<User> implements IUserReposit
       user.password = hashedPassword;
       await user.save();
       return user;
-    } catch (error) {
-
-
-      throw new Error('Database Error');
+    } catch (error:any) {
+      throw new Error(error);
 
     }
   }
@@ -132,9 +131,9 @@ export class UserRepository extends BaseRepository<User> implements IUserReposit
       const objectId = new mongoose.Types.ObjectId(vendorId);
       const result = await Auditorium.find(objectId);
       return result;
-    } catch (error) {
-      console.error('Error fetching Dishes from the database:', error);
-      throw new Error('Error fetching Dishes from the database');
+    } catch (error:any) {
+      throw new Error(error);
+
     }
 
   }
@@ -145,9 +144,9 @@ export class UserRepository extends BaseRepository<User> implements IUserReposit
   async fetchfromDBAuditorium(vendorId: string): Promise<any | null> {
     try {
       return this.fetchAuditorium(vendorId)
-    } catch (error) {
-      console.error('Error fetching auditorium from the database:', error);
-      throw new Error('Error fetching auditorium from the database');
+    } catch (error:any) {
+      throw new Error(error);
+
     }
   }
 
@@ -156,9 +155,9 @@ export class UserRepository extends BaseRepository<User> implements IUserReposit
   async findVendor(vendorId: string) {
     try {
       return this.findVendorBase(vendorId)
-    } catch (error) {
-      console.error("Error in repository:", error);
-      throw error;
+    } catch (error:any) {
+      throw new Error(error);
+
     }
   }
 
@@ -174,9 +173,9 @@ export class UserRepository extends BaseRepository<User> implements IUserReposit
         await chat.save();
       }
       return { chatId: chat._id };
-    } catch (error) {
-      console.error("Error in repository:", error);
-      throw error;
+    } catch (error:any) {
+      throw new Error(error);
+
     }
   }
 
@@ -199,8 +198,9 @@ export class UserRepository extends BaseRepository<User> implements IUserReposit
       }
 
       return { review }
-    } catch (error) {
-      throw new Error('Database Error');
+    } catch (error:any) {
+      throw new Error(error);
+
     }
   }
 
@@ -210,8 +210,8 @@ export class UserRepository extends BaseRepository<User> implements IUserReposit
       // .populate('vendorId')
       // .populate('userId')
       return { notification: notifications };
-    } catch (error) {
-      throw new Error('Database Error');
+    } catch (error:any) {
+      throw new Error(error);
 
     }
   }
@@ -228,9 +228,9 @@ export class UserRepository extends BaseRepository<User> implements IUserReposit
       const result = await Dishes.find({ vendorId: objectId, isDeleted: false });
 
       return result;
-    } catch (error) {
-      console.error('Error fetching dishes:', error);
-      throw new Error(`Error fetching dishes: ${error}`);
+    } catch (error:any) {
+      throw new Error(error);
+
     }
   }
 
@@ -240,8 +240,9 @@ export class UserRepository extends BaseRepository<User> implements IUserReposit
 
       const result = await Auditorium.find({ vendorId: objectId, isDeleted: false });
       return result
-    } catch (error) {
-      throw new Error(`Error fetching dishes: ${error}`);
+    } catch (error:any) {
+      throw new Error(error);
+
     }
   }
 
@@ -251,8 +252,8 @@ export class UserRepository extends BaseRepository<User> implements IUserReposit
     try {
       let result = await Auditorium.findById(auditoriumId);
       return result
-    } catch (error) {
-      throw new Error('Database Error');
+    } catch (error:any) {
+      throw new Error(error);
 
     }
   }
@@ -264,8 +265,9 @@ export class UserRepository extends BaseRepository<User> implements IUserReposit
       console.log('Entering Repository Layer');
       const result = await this.dishesById(dishesId);
       return result;
-    } catch (error) {
-      throw new Error(`Repository Error - Fetching by ID: ${error}`);
+    } catch (error:any) {
+      throw new Error(error);
+
     }
   }
 
@@ -276,9 +278,9 @@ export class UserRepository extends BaseRepository<User> implements IUserReposit
       const bookedData = await bookedModel
         .findById(id)
       return bookedData;
-    } catch (error) {
-      console.error("Error fetching booking details:", error);
-      throw new Error('Database Error');
+    } catch (error:any) {
+      throw new Error(error);
+
     }
   }
 
@@ -325,9 +327,9 @@ export class UserRepository extends BaseRepository<User> implements IUserReposit
         await this.updateSlotAvailability(newBooking.StartingDate, newBooking.EndingDate, vendorId);
         return newBooking;
       }
-    } catch (error) {
-      console.error('Error updating booking:', error);
-      throw new Error('Database Error');
+    } catch (error:any) {
+      throw new Error(error);
+
     }
   }
 
@@ -360,8 +362,9 @@ export class UserRepository extends BaseRepository<User> implements IUserReposit
       } else {
         console.log('No available slots found for the given dates.');
       }
-    } catch (error) {
-      throw new Error('Database Error');
+    } catch (error:any) {
+      throw new Error(error);
+
     }
   }
 
@@ -376,9 +379,9 @@ export class UserRepository extends BaseRepository<User> implements IUserReposit
     try {
       const newChat = new chatModel({ message: chat });
       return await newChat.save();
-    } catch (error) {
-      console.error("Database error:", error);
-      throw new Error("Database operation failed.");
+    } catch (error:any) {
+      throw new Error(error);
+
     }
   }
 
@@ -392,9 +395,9 @@ export class UserRepository extends BaseRepository<User> implements IUserReposit
         .populate('vendorId')
         .populate('auditoriumId');
       return results;
-    } catch (error) {
-      console.error("Database error:", error);
-      throw new Error("Database operation failed.");
+    } catch (error:any) {
+      throw new Error(error);
+
     }
   }
 
@@ -412,9 +415,9 @@ export class UserRepository extends BaseRepository<User> implements IUserReposit
 
       await user.save();
       return user;
-    } catch (error) {
-      console.error(error);
-      throw error;
+    } catch (error:any) {
+      throw new Error(error);
+
     }
   }
 
@@ -436,9 +439,9 @@ export class UserRepository extends BaseRepository<User> implements IUserReposit
     try {
       const chats = await chatModel.find({ userId }).select('_id');
       return chats;
-    } catch (error) {
-      console.error("Error fetching chats from the database:", error);
-      throw error;
+    } catch (error:any) {
+      throw new Error(error);
+
     }
   }
 
@@ -451,9 +454,9 @@ export class UserRepository extends BaseRepository<User> implements IUserReposit
       });
 
       return unreadCount;
-    } catch (error) {
-      console.error("Error fetching unread messages count from the database:", error);
-      throw error;
+    } catch (error:any) {
+      throw new Error(error);
+
     }
   }
 
@@ -470,9 +473,9 @@ export class UserRepository extends BaseRepository<User> implements IUserReposit
       console.log("Review saved:", savedReview);
 
       return savedReview;
-    } catch (error) {
-      console.error("Error saving review to the database:", error);
-      throw error;
+    } catch (error:any) {
+      throw new Error(error);
+
     }
   }
 
@@ -487,9 +490,9 @@ export class UserRepository extends BaseRepository<User> implements IUserReposit
 
       console.log(reviews);
       return reviews;
-    } catch (error) {
-      console.error("Error fetching reviews:", error);
-      throw error;
+    } catch (error:any) {
+      throw new Error(error);
+
     }
   }
 
@@ -506,9 +509,9 @@ export class UserRepository extends BaseRepository<User> implements IUserReposit
         { new: true }
       );
       return updatedVendor;
-    } catch (error) {
-      console.error("Error updating vendor rating:", error);
-      throw error;
+    } catch (error:any) {
+      throw new Error(error);
+
     }
   }
 
@@ -521,8 +524,8 @@ export class UserRepository extends BaseRepository<User> implements IUserReposit
         isAvailable: true,
         date: { $gte: today },
       }).exec();
-    } catch (error) {
-      throw error;
+    } catch (error:any) {
+      throw new Error(error);
 
     }
   }
@@ -582,9 +585,9 @@ export class UserRepository extends BaseRepository<User> implements IUserReposit
       console.log('Booking saved successfully:', savedBooking);
       return savedBooking;
   
-    } catch (error: any) {
-      console.error('Error saving booking:', error.message);
-      throw new Error(error.message || 'Error saving booking');
+    } catch (error:any) {
+      throw new Error(error);
+
     }
   }
   
@@ -630,8 +633,9 @@ export class UserRepository extends BaseRepository<User> implements IUserReposit
         vendorname: { $regex: term, $options: 'i' },
         isBlocked: false,
       }).exec();
-    } catch (error) {
-      throw new Error(`Error fetching vendors: ${error}`);
+    } catch (error:any) {
+      throw new Error(error);
+
     }
   }
 

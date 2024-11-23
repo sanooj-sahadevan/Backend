@@ -5,7 +5,7 @@ import { AuditoriumDocument } from "../models/auditoriumModel";
 import { IVendorRepository } from "../interfaces/repository/vendorRepository";
 import { IVendorService } from "../interfaces/service/vendorService";
 import { ISlot } from "../interfaces/slot";
-import {  generateVendorAccessToken, generatevendorRefreshToken } from "../utils/generateJWT";
+import { generateVendorAccessToken, generatevendorRefreshToken } from "../utils/generateJWT";
 
 
 export class VendorService implements IVendorService {
@@ -29,10 +29,9 @@ export class VendorService implements IVendorService {
         }
       }
       return await this.vendorRepository.createVendor(vendor);
-    } catch (error) {
-      console.error("Error during user registration:", error);
-
-      throw error;
+    } catch (error: any) {
+      console.error("Error during user registration:");
+      throw new Error(error);
     }
   }
 
@@ -46,8 +45,8 @@ export class VendorService implements IVendorService {
         return vendor;
       }
 
-    } catch (error) {
-      throw error;
+    } catch (error: any) {
+      throw new Error(error);
     }
 
   }
@@ -56,42 +55,48 @@ export class VendorService implements IVendorService {
   async loginVendor(email: string, password: string) {
     try {
       const vendor = await this.vendorRepository.findVendorByEmail(email);
-      console.log(vendor,'vendor');
-      
+      console.log(vendor, 'vendor');
+console.log(vendor);
+console.log(vendor.password);
+console.log(vendor.vendorname);
+
+
+
       if (!vendor) {
         throw new Error("Invalid Email/Password");
       }
+      console.log(password,'okpas');
+      console.log(email,'ok email');
 
-  
-      // const isPasswordValid = await bcrypt.compare(password, vendor.password);
-      // if (password!== vendor.password) {
-      //   throw new Error("Invalid Password");xxxx
-      // }
-  
+
+
+      if (password !== vendor.password) {
+        throw new Error("Invalid Password");
+      }
       const accessToken = generateVendorAccessToken(vendor._id, "vendorToken");
       const refreshToken = generatevendorRefreshToken(vendor._id, "vendorToken");
 
       return { vendor, accessToken, refreshToken };
-    } catch (error) {
-      throw new Error("Failed to login");
+    } catch (error: any) {
+      throw new Error(error);
     }
   }
-  
+
 
 
   async vendorAddress() {
     try {
       return await this.vendorRepository.vendorAddressFromDB();
-    } catch (error) {
-      throw new Error('Failed to fetch vendor addresses');
+    } catch (error: any) {
+      throw new Error(error);
     }
   }
 
 
   async editVendorService(vendorDetails: any): Promise<any> {
     try {
-      console.log('vendor service',vendorDetails);
-      
+      console.log('vendor service', vendorDetails);
+
       const existingVendor = await this.vendorRepository.findVendorByEmailRepo(vendorDetails.email);
 
       if (existingVendor) {
@@ -99,9 +104,9 @@ export class VendorService implements IVendorService {
       } else {
         return await this.vendorRepository.editVendorRepo(null, vendorDetails);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error in editVendorService:', error);
-      throw new Error('Failed to update vendor details');
+      throw new Error(error);
     }
   }
 
@@ -114,7 +119,7 @@ export class VendorService implements IVendorService {
       const presignedUrl = await uploadToS3Bucket(fileName, fileType);
       return presignedUrl;
     } catch (error: any) {
-      throw new Error(error.message);
+      throw new Error(error);
     }
   }
 
@@ -127,8 +132,8 @@ export class VendorService implements IVendorService {
         throw new Error(`Error finding vendor`);
       }
       return vendor;
-    } catch (error) {
-      throw new Error(`Error finding vendor: ${error}`);
+    } catch (error: any) {
+      throw new Error(error);
     }
   }
 
@@ -142,8 +147,8 @@ export class VendorService implements IVendorService {
         throw new Error(`Error finding vendor`);
       }
       return vendor;
-    } catch (error) {
-      throw new Error(`Error finding vendor: ${error}`);
+    } catch (error: any) {
+      throw new Error(error);
     }
   }
 
@@ -155,8 +160,8 @@ export class VendorService implements IVendorService {
         throw new Error(`Error finding vendor`);
       }
       return vendor;
-    } catch (error) {
-      throw new Error(`Error finding vendor: ${error}`);
+    } catch (error: any) {
+      throw new Error(error);
     }
   }
 
@@ -174,9 +179,9 @@ export class VendorService implements IVendorService {
       console.log("Dish notification result:", dishNotification);
 
       return newDish;
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error in uploadDishes: ", error);
-      throw error;
+      throw new Error(error);
     }
   }
 
@@ -191,9 +196,9 @@ export class VendorService implements IVendorService {
       const dishNotification = await this.vendorRepository.notifyAuditoriumAdded(vendorId, newAuditorium, newAuditorium.auditoriumName);
       console.log("Dish notification result:", dishNotification);
       return newAuditorium;
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error in uploadAuditorium: ", error);
-      throw error;
+      throw new Error(error);
     }
   }
 
@@ -203,8 +208,8 @@ export class VendorService implements IVendorService {
       console.log('Service invoked to find dishes for vendor:', vendorId);
       const dishes = await this.vendorRepository.findFoodVendorIdInDb(vendorId);
       return dishes;
-    } catch (error) {
-      throw new Error(`Error finding vendor dishes: ${error}`);
+    } catch (error: any) {
+      throw new Error(error);
     }
   }
 
@@ -213,8 +218,8 @@ export class VendorService implements IVendorService {
       console.log('Service invoked to find reviews for vendor:', vendorId);
       const dishes = await this.vendorRepository.findReviewsVendorIdInDb(vendorId);
       return dishes;
-    } catch (error) {
-      throw new Error(`Error finding vendor dishes: ${error}`);
+    } catch (error: any) {
+      throw new Error(error);
     }
   }
 
@@ -225,8 +230,8 @@ export class VendorService implements IVendorService {
       console.log('Service invoked to find auditorium for vendor:', vendorId);
       const Auditorium = await this.vendorRepository.findAuditoriumVendorIdInDb(vendorId);
       return Auditorium;
-    } catch (error) {
-      throw new Error(`Error finding vendor dishes: ${error}`);
+    } catch (error: any) {
+      throw new Error(error);
     }
   }
 
@@ -238,8 +243,8 @@ export class VendorService implements IVendorService {
         throw new Error(`Error soft-deleting dish`);
       }
       return updatedDish;
-    } catch (error) {
-      throw new Error(`Error soft-deleting dish: ${error}`);
+    } catch (error: any) {
+      throw new Error(error);
     }
   }
 
@@ -251,8 +256,8 @@ export class VendorService implements IVendorService {
         throw new Error(`Error soft-deleting auditorium`);
       }
       return updatedAuditorium;
-    } catch (error) {
-      throw new Error(`Error soft-deleting auditorium: ${error}`);
+    } catch (error: any) {
+      throw new Error(error);
     }
   }
 
@@ -263,8 +268,8 @@ export class VendorService implements IVendorService {
         throw new Error(`Error soft-deleting auditorium`);
       }
       return updatedreview;
-    } catch (error) {
-      throw new Error(`Error soft-deleting auditorium: ${error}`);
+    } catch (error: any) {
+      throw new Error(error);
     }
   }
 
@@ -276,8 +281,8 @@ export class VendorService implements IVendorService {
         throw new Error(`Error soft-deleting auditorium`);
       }
       return deletereview;
-    } catch (error) {
-      throw new Error(`Error soft-deleting auditorium: ${error}`);
+    } catch (error: any) {
+      throw new Error(error);
     }
   }
 
@@ -288,8 +293,8 @@ export class VendorService implements IVendorService {
         throw new Error(`Error soft-deleting auditorium`);
       }
       return bookingDetails
-    } catch (error) {
-      throw new Error(`Error soft-deleting auditorium: ${error}`);
+    } catch (error: any) {
+      throw new Error(error);
 
     }
   }
@@ -301,8 +306,8 @@ export class VendorService implements IVendorService {
     try {
       const vendor = await this.vendorRepository.findVendorByEmail(email);
       return vendor
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      throw new Error(error);
 
     }
   }
@@ -312,9 +317,9 @@ export class VendorService implements IVendorService {
     try {
       const chats = await this.vendorRepository.chatDB(vendorId);
       return chats;
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error fetching chats:", error);
-      throw error;
+      throw new Error(error);
     }
   }
 
@@ -331,9 +336,9 @@ export class VendorService implements IVendorService {
       io.to(vendorId).emit("unreadCount", { unreadCount });
 
       return unreadCount;
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error fetching unread messages:", error);
-      throw error;
+      throw new Error(error);
     }
   }
 
@@ -375,8 +380,8 @@ export class VendorService implements IVendorService {
       }
 
       return slots;
-    } catch (error) {
-      throw error;
+    } catch (error: any) {
+      throw new Error(error);
 
     }
   }
@@ -386,9 +391,9 @@ export class VendorService implements IVendorService {
   async getSlotsByWorkerId(vendorId: string): Promise<ISlot[]> {
     try {
       return await this.vendorRepository.getSlotsByWorkerIdFromRepo(vendorId);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error fetching slots from repository:", error);
-      throw error;
+      throw new Error(error);
     }
   }
 
@@ -396,12 +401,12 @@ export class VendorService implements IVendorService {
 
   async saveVendorServiceImages(vendorId: string, photoUrls: string[]): Promise<void> {
     try {
-      console.log('Vendor ID and Photo URLs in Service:', vendorId, photoUrls); 
-      
+      console.log('Vendor ID and Photo URLs in Service:', vendorId, photoUrls);
+
       const updatedVendor = await this.vendorRepository.updateVendorServiceImages(vendorId, photoUrls);
-      return updatedVendor; 
-    } catch (error) {
-      throw new Error(`Failed to save service images: ${error}`);
+      return updatedVendor;
+    } catch (error: any) {
+      throw new Error(error);
     }
   }
 
@@ -410,14 +415,10 @@ export class VendorService implements IVendorService {
     try {
       return this.vendorRepository.isDateRangeAvailable(vendorId, startDate, endDate);
 
-    } catch (error) {
-      throw new Error(`Failed to save service images: ${error}`);
-
+    } catch (error: any) {
+      throw new Error(error);
     }
-}
-
-
-
+  }
 
 }
 

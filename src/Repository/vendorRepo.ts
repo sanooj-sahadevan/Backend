@@ -24,8 +24,8 @@ export class VendorRepository implements IVendorRepository {
     try {
       const newVendor = new VendorModel(vendor);
       return newVendor.save();
-    } catch (error) {
-      throw new Error('Database Error');
+    } catch (error:any) {
+      throw new Error(error);
 
     }
 
@@ -34,9 +34,9 @@ export class VendorRepository implements IVendorRepository {
   async findVendorByEmail(email: string) {
     try {
       return VendorModel.findOne({ email });
-    } catch (error) {
+    } catch (error:any) {
       console.error(error);
-      throw new Error( "Failed to login");
+      throw new Error(error);
     }
   }
 
@@ -44,8 +44,8 @@ export class VendorRepository implements IVendorRepository {
   async updateVendor(email: string, update: Partial<Vendor>) {
     try {
       return VendorModel.findOneAndUpdate({ email }, update, { new: true });
-    } catch (error) {
-      throw new Error('Database query failed');
+    } catch (error:any) {
+      throw new Error(error);
 
     }
   }
@@ -53,8 +53,8 @@ export class VendorRepository implements IVendorRepository {
   async findVendorByEmailAndPassword(email: string, password: string) {
     try {
       return VendorModel.findOne({ email, password });
-    } catch (error) {
-      throw new Error('Database query failed');
+    } catch (error:any) {
+      throw new Error(error);
 
     }
   }
@@ -63,17 +63,17 @@ export class VendorRepository implements IVendorRepository {
   async vendorAddressFromDB() {
     try {
       return await VendorModel.find().sort({ createdAt: -1 });
-    } catch (error) {
-      throw new Error('Database query failed');
+    } catch (error:any) {
+      throw new Error(error);
     }
   }
 
   async findVendorByEmailRepo(email: string): Promise<Vendor | null> {
     try {
       return await VendorModel.findOne({ email });
-    } catch (error) {
+    } catch (error:any) {
       console.error('Error finding vendor by email:', error);
-      throw new Error('Database operation failed');
+      throw new Error(error);
     }
   }
 
@@ -104,9 +104,9 @@ export class VendorRepository implements IVendorRepository {
         await newVendor.save();
         return newVendor;
       }
-    } catch (error) {
+    } catch (error:any) {
       console.error('Error in editVendorRepo:', error);
-      throw new Error('Database operation failed');
+      throw new Error(error);
     }
   }
 
@@ -118,8 +118,8 @@ export class VendorRepository implements IVendorRepository {
     try {
       return await VendorModel.findById(vendorId);
 
-    } catch (error) {
-      throw new Error('Database operation failed');
+    } catch (error:any) {
+      throw new Error(error);
 
     }
   }
@@ -129,8 +129,8 @@ export class VendorRepository implements IVendorRepository {
     try {
       let result = await Auditorium.findById(auditoriumId);
       return result
-    } catch (error) {
-      throw new Error('Database operation failed');
+    } catch (error:any) {
+      throw new Error(error);
 
     }
 
@@ -140,8 +140,8 @@ export class VendorRepository implements IVendorRepository {
   async findDishesByIdInDb(dishesId: string) {
     try {
       return await Dishes.findById(dishesId);
-    } catch (error) {
-      throw new Error('Database operation failed');
+    } catch (error:any) {
+      throw new Error(error);
     }
   }
 
@@ -151,8 +151,8 @@ export class VendorRepository implements IVendorRepository {
         .find({ vendorId: vendorId })
 
       return result
-    } catch (error) {
-      throw new Error('Database operation failed');
+    } catch (error:any) {
+      throw new Error(error);
 
     }
   }
@@ -163,8 +163,8 @@ export class VendorRepository implements IVendorRepository {
         .populate('userId')
         .exec();
       return result
-    } catch (error) {
-      throw new Error('Database operation failed');
+    } catch (error:any) {
+      throw new Error(error);
 
     }
   }
@@ -176,8 +176,8 @@ export class VendorRepository implements IVendorRepository {
     try {
       const res = await Auditorium.find({ vendorId: vendorId });
       return res
-    } catch (error) {
-      throw new Error('Database operation failed');
+    } catch (error:any) {
+      throw new Error(error);
 
     }
   }
@@ -202,9 +202,9 @@ export class VendorRepository implements IVendorRepository {
       console.log("Saved Dish: ", savedDish);
 
       return savedDish;
-    } catch (error) {
+    } catch (error:any) {
       console.error("Error saving dish: ", error);
-      throw new Error('Database operation failed');
+      throw new Error(error);
     }
   }
 
@@ -228,9 +228,9 @@ export class VendorRepository implements IVendorRepository {
       await savedAuditorium.populate("vendorId");
       return savedAuditorium
 
-    } catch (error) {
+    } catch (error:any) {
       console.error("Error saving auditorium: ", error);
-      throw error;
+      throw new Error(error);
     }
   }
 
@@ -246,9 +246,9 @@ export class VendorRepository implements IVendorRepository {
       dish.isDeleted = true;
       await dish.save();
       return dish;
-    } catch (error) {
+    } catch (error:any) {
       console.error(`Error soft-deleting dish: ${error}`);
-      throw new Error('Database operation failed');
+      throw new Error(error);
     }
   }
 
@@ -266,9 +266,9 @@ export class VendorRepository implements IVendorRepository {
       auditorium.isDeleted = true;
       await auditorium.save();
       return auditorium;
-    } catch (error) {
+    } catch (error:any) {
       console.error(`Error soft-deleting auditorium: ${error}`);
-      throw new Error('Database operation failed');
+      throw new Error(error);
     }
   }
 
@@ -284,9 +284,9 @@ export class VendorRepository implements IVendorRepository {
       console.log(review);
 
       return review;
-    } catch (error) {
+    } catch (error:any) {
       console.error(`Error soft-deleting auditorium: ${error}`);
-      throw new Error('Database operation failed');
+      throw new Error(error);
     }
   }
   async updatedreviewRepoReject(reviewId: string) {
@@ -301,9 +301,9 @@ export class VendorRepository implements IVendorRepository {
       console.log(`Review with ID ${reviewId} deleted successfully.`);
 
       return review;
-    } catch (error) {
+    } catch (error:any) {
       console.error(`Error deleting review: ${error}`);
-      throw new Error('Database operation failed');
+      throw new Error(error);
     }
   }
 
@@ -318,9 +318,9 @@ export class VendorRepository implements IVendorRepository {
         .populate('auditoriumId');
       console.log('Fetched Data with populated fields:', results);
       return results;
-    } catch (error) {
+    } catch (error:any) {
       console.error("Database error:", error);
-      throw new Error("Database operation failed.");
+      throw new Error(error);
     }
   }
 
@@ -331,9 +331,9 @@ export class VendorRepository implements IVendorRepository {
     try {
       const chats = await chatModel.find({ vendorId }).select('_id');
       return chats;
-    } catch (error) {
+    } catch (error:any) {
       console.error("Error fetching chats from the database:", error);
-      throw new Error('Database operation failed');
+      throw new Error(error);
     }
   }
 
@@ -346,9 +346,9 @@ export class VendorRepository implements IVendorRepository {
       });
 
       return unreadCount;
-    } catch (error) {
+    } catch (error:any) {
       console.error("Error fetching unread messages count from the database:", error);
-      throw new Error('Database operation failed');
+      throw new Error(error);
     }
   }
 
@@ -356,8 +356,8 @@ export class VendorRepository implements IVendorRepository {
 
     try {
       return Slot.findOne({ vendorId, date }).exec();
-    } catch (error) {
-      throw new Error('Database operation failed');
+    } catch (error:any) {
+      throw new Error(error);
 
     }
   }
@@ -367,8 +367,8 @@ export class VendorRepository implements IVendorRepository {
     try {
       const slot = new Slot(slotData);
       return await slot.save();
-    } catch (error) {
-      throw new Error('Database operation failed');
+    } catch (error:any) {
+      throw new Error(error);
 
     }
 
@@ -384,8 +384,8 @@ export class VendorRepository implements IVendorRepository {
         vendorId,
         date: { $gte: today },
       }).exec();
-    } catch (error) {
-      throw new Error('Database operation failed');
+    } catch (error:any) {
+      throw new Error(error);
 
     }
   }
@@ -405,9 +405,9 @@ export class VendorRepository implements IVendorRepository {
       );
 
       await Promise.all(notificationPromises);
-    } catch (error) {
+    } catch (error:any) {
       console.error("Error in notifyDishAdded: ", error);
-      throw new Error('Database operation failed');
+      throw new Error(error);
     }
   }
 
@@ -431,9 +431,9 @@ export class VendorRepository implements IVendorRepository {
       await Promise.all(notificationPromises)
 
       console.log(`Notifications sent for auditoriumName: ${auditoriumName}`);
-    } catch (error) {
+    } catch (error:any) {
       console.error("Error in notifyDishAdded: ", error);
-      throw new Error('Database operation failed');
+      throw new Error(error);
     }
   }
 
@@ -447,8 +447,8 @@ export class VendorRepository implements IVendorRepository {
   async createNotificationDishes(notificationData: { userId: any; vendorId: string; dishId: mongoose.Types.ObjectId; notificationMessage: string; type: string }) {
     try {
       return await NotificationModel.create(notificationData);
-    } catch (error) {
-      throw new Error('Database operation failed');
+    } catch (error:any) {
+      throw new Error(error);
 
     }
   }
@@ -457,8 +457,8 @@ export class VendorRepository implements IVendorRepository {
   async getAllUsers() {
     try {
       return await UserModel.find();
-    } catch (error) {
-      throw new Error('Database operation failed');
+    } catch (error:any) {
+      throw new Error(error);
 
     }
   }
@@ -478,8 +478,8 @@ export class VendorRepository implements IVendorRepository {
       const updatedVendor = await vendor.save();
       console.log('Updated Vendor:', updatedVendor);
       return updatedVendor;
-    } catch (error) {
-      throw new Error(`Error updating service images: ${error}`);
+    } catch (error:any) {
+      throw new Error(error);
     }
   }
 
@@ -487,14 +487,12 @@ export class VendorRepository implements IVendorRepository {
     console.log(vendorId, startDate, endDate);
 
     try {
-        // Fetch the vendor by ID
         const vendor = await VendorModel.findOne({ _id: vendorId });
 
         if (!vendor) {
             console.error("Vendor not found");
             return false;
         }
-        // Check if availability is an array
         if (!Array.isArray(vendor.availability)) {
             console.error("Vendor availability data is not available or is not an array");
             return false;
@@ -513,10 +511,10 @@ export class VendorRepository implements IVendorRepository {
         });
 
         return isAvailable;
-    } catch (error) {
+    } catch (error:any) {
         console.error("Error in repository:", error);
-        throw new Error("Error checking date range availability.");
-    }
+        throw new Error(error);
+      }
 }
 
 

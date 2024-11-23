@@ -29,27 +29,16 @@ export class UserController {
 
   async login(req: Request, res: Response, next: NextFunction) {
     try {
-      console.log('login daaa');
-
       const { email, password } = req.body;
       const { user, accessToken, refreshToken } = await this.userService.loginUser(email, password);
-
-
-      // res.cookie("refreshToken", refreshToken, {
-      //   httpOnly: true,
-      //   secure: true,
-      //   sameSite: "none",
-      //   maxAge: 7 * 24 * 60 * 60 * 1000,
-      // });
-
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
         secure: true,
         sameSite: "strict",
-        domain: ".eventopia.shop", 
-        maxAge: 7 * 24 * 60 * 60 * 1000, 
+        domain: ".eventopia.shop",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
       });
-      
+
 
       res.cookie("token", accessToken, {
         httpOnly: false,
@@ -58,15 +47,9 @@ export class UserController {
         domain: ".eventopia.shop",
         maxAge: 1 * 60 * 60 * 1000,
       });
-      
-      // res.cookie("token", accessToken, {
-      //   httpOnly: false,
-      //   secure: true,
-      //   sameSite: "none",
-      //   maxAge: 1 * 60 * 60 * 1000,
-      // });
       res.status(HttpStatus.OK).json({ user, accessToken });
-    } catch (error: any) {
+    } catch (error: unknown) {
+      console.error("Error in loginController:", error);
       next(error);
     }
   }
@@ -77,30 +60,30 @@ export class UserController {
   async logoutController(req: Request, res: Response, next: NextFunction) {
     try {
       console.log('Logging out, clearing cookies...');
-        res.clearCookie("refreshToken", {
+      res.clearCookie("refreshToken", {
         httpOnly: true,
-        secure: true, 
-        sameSite: "strict", 
-        domain: ".eventopia.shop", 
-        path: "/", 
+        secure: true,
+        sameSite: "strict",
+        domain: ".eventopia.shop",
+        path: "/",
       });
       console.log('refreshToken cleared');
-  
+
       res.clearCookie("token", {
         httpOnly: true,
         secure: true,
         sameSite: "strict",
-        domain: ".eventopia.shop", 
+        domain: ".eventopia.shop",
         path: "/",
       });
       console.log('token cleared');
-        return res.status(200).json({ success: true, message: "Logged out successfully" });
-    } catch (error) {
+      return res.status(200).json({ success: true, message: "Logged out successfully" });
+    } catch (error:unknown) {
       console.error("Error in logoutController:", error);
       next(error);
     }
   }
-  
+
 
   async verifyOtp(req: Request, res: Response, next: NextFunction) {
     try {
@@ -108,8 +91,8 @@ export class UserController {
       console.log({ otp });
       const result = await this.userService.verifyOtpService(email, otp);
       res.status(HttpStatus.OK).json(result);
-    } catch (error: any) {
-      res.status(HttpStatus.BAD_REQUEST).json({ error: error.message });
+    } catch (error:unknown) {
+      res.status(HttpStatus.BAD_REQUEST).json({ error });
     }
   }
 
@@ -119,7 +102,7 @@ export class UserController {
     try {
       const vendors = await this.userService.getAllVendors();
       res.status(HttpStatus.OK).json(vendors);
-    } catch (error) {
+    } catch (error:unknown) {
       next(error);
     }
   }
@@ -129,7 +112,7 @@ export class UserController {
       const { vendorId } = req.query;
       const dishes = await this.userService.getAllDishes(vendorId as string);
       res.status(HttpStatus.OK).json(dishes);
-    } catch (error) {
+    } catch (error:unknown) {
       next(error);
     }
   }
@@ -139,7 +122,7 @@ export class UserController {
       const { vendorId } = req.query;
       const auditorium = await this.userService.getAllAuditorium(vendorId as string);
       res.status(HttpStatus.OK).json(auditorium);
-    } catch (error) {
+    } catch (error:unknown) {
       next(error);
     }
   }
@@ -153,8 +136,8 @@ export class UserController {
         return res.status(HttpStatus.NOT_FOUND).json({ error: 'User not found' });
       }
       res.status(HttpStatus.OK).json({ message: 'OTP sent successfully', otp, email });
-    } catch (error: any) {
-      next(error.message);
+    } catch (error:unknown) {
+      next(error);
     }
   }
 
@@ -166,7 +149,7 @@ export class UserController {
       const user = await this.userService.update(email, password);
 
       res.status(HttpStatus.OK).json({ message: "Password updated successfully", user });
-    } catch (error) {
+    } catch (error:unknown) {
       next(error);
     }
   }
@@ -186,7 +169,7 @@ export class UserController {
       }
 
       res.status(200).json({ message: 'User updated successfully', data: updatedUser });
-    } catch (error) {
+    } catch (error:unknown) {
       console.error('Error in editUserDetails controller:', error);
       res.status(500).json({ message: 'Internal server error' });
       next(error);
@@ -201,7 +184,7 @@ export class UserController {
       const { vendorId, userId } = req.query;
       const result = await this.userService.findVendorById(vendorId as string, userId as string);
       res.status(HttpStatus.OK).json(result);
-    } catch (error) {
+    } catch (error:unknown) {
       next(error);
     }
   }
@@ -216,7 +199,7 @@ export class UserController {
 
       const result = await this.userService.fetchReviewById(vendorId as string, userId as string);
       res.status(HttpStatus.OK).json(result);
-    } catch (error) {
+    } catch (error:unknown) {
       next(error);
     }
   }
@@ -228,7 +211,7 @@ export class UserController {
       const { userId } = req.query;
       const result = await this.userService.fetchNotificationsById(userId as string);
       res.status(HttpStatus.OK).json(result);
-    } catch (error) {
+    } catch (error:unknown) {
       next(error);
     }
   }
@@ -240,7 +223,7 @@ export class UserController {
       const { vendorId } = req.params;
       const dishes = await this.userService.findFoodVendorById(vendorId);
       res.status(HttpStatus.OK).json(dishes);
-    } catch (error) {
+    } catch (error:unknown) {
       console.error('Error in fetchFoodDetails:', error);
       next(error);
     }
@@ -252,7 +235,7 @@ export class UserController {
       const { vendorId } = req.params;
       const dishes = await this.userService.findAuditoriumVendorById(vendorId);
       res.status(HttpStatus.OK).json(dishes);
-    } catch (error) {
+    } catch (error:unknown) {
       console.error('Error in fetchFoodDetails:', error);
       next(error);
     }
@@ -263,7 +246,7 @@ export class UserController {
       const { auditoriumId } = req.params;
       const vendor = await this.userService.findAuditoriumById(auditoriumId);
       res.status(HttpStatus.OK).json(vendor);
-    } catch (error) {
+    } catch (error:unknown) {
       next(error);
     }
   }
@@ -273,7 +256,7 @@ export class UserController {
       const { dishesId } = req.params;
       const vendor = await this.userService.finddishesById(dishesId);
       res.status(HttpStatus.OK).json(vendor);
-    } catch (error) {
+    } catch (error:unknown) {
       next(error);
     }
   }
@@ -284,7 +267,7 @@ export class UserController {
     try {
       const booking: any = await this.userService.findEvent(id);
       res.status(HttpStatus.OK).json(booking);
-    } catch (error) {
+    } catch (error:unknown) {
       next(error);
     }
   }
@@ -306,7 +289,7 @@ export class UserController {
       console.log('last', { hash, udf6, udf7 });
 
       res.send({ hash, udf6, udf7 });
-    } catch (error) {
+    } catch (error:unknown) {
       next(error);
     }
   }
@@ -334,7 +317,7 @@ export class UserController {
       });
       await sendEmail(req.body.email, otp);
       res.status(HttpStatus.OK).json("OTP sent to email and saved in the database.");
-    } catch (error) {
+    } catch (error:unknown) {
       next(error);
     }
   }
@@ -353,7 +336,7 @@ export class UserController {
         status
       );
       res.status(HttpStatus.OK).send(transactionId);
-    } catch (error) {
+    } catch (error:unknown) {
       next(error);
     }
   }
@@ -395,7 +378,7 @@ export class UserController {
         res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ success: false, message: "Booking update failed" });
       }
 
-    } catch (error) {
+    } catch (error:unknown) {
       next(error);
     }
   }
@@ -412,7 +395,7 @@ export class UserController {
     try {
       const booking = await this.userService.findBookingDetails(userId);
       res.status(HttpStatus.OK).json(booking);
-    } catch (error) {
+    } catch (error:unknown) {
       next(error);
 
     }
@@ -424,14 +407,14 @@ export class UserController {
     try {
       const updatedPassword = await this.userService.findChangePassword(email, newPassword); // Updated method name
       res.status(HttpStatus.OK).json(updatedPassword);
-    } catch (error) {
+    } catch (error:unknown) {
       next(error);
     }
   }
 
 
 
-  async updatePasswordController(req: Request, res: Response) {
+  async updatePasswordController(req: Request, res: Response,next:NextFunction) {
     const { email } = req.params;
     const { newPassword } = req.body;
 
@@ -441,16 +424,10 @@ export class UserController {
     try {
       await this.userService.updatePasswordService(email, newPassword);
       res.status(200).json({ message: 'Password updated successfully.' });
-    } catch (error) {
+    } catch (error:unknown) {
       console.error('Error updating password:', error);
-      res.status(500).json({ message: 'Failed to update password.' });
-    }
+      next(error);    }
   };
-
-
-
-
-
 
 
 
@@ -482,7 +459,7 @@ export class UserController {
       console.log('Unread messages count:', unreadCount);
 
       res.status(HttpStatus.OK).json({ unreadCount });
-    } catch (error) {
+    } catch (error:unknown) {
       next(error);
     }
   }
@@ -498,31 +475,29 @@ export class UserController {
       }
       const reviewData = await this.userService.reviewService({ reviews, stars, userId, vendorId });
       res.status(HttpStatus.OK).json(reviewData);
-    } catch (error) {
+    } catch (error:unknown) {
       next(error);
     }
   }
 
-  async getSlotsByWorkerController(req: Request, res: Response) {
+  async getSlotsByWorkerController(req: Request, res: Response,next:NextFunction) {
     try {
       const vendorId = req.params.vendorId;
       const slots = await this.userService.getSlotsByWorkerId(vendorId);
       res.status(200).json(slots);
-    } catch (error: any) {
+    } catch (error:unknown) {
       console.error("Error fetching slots:", error);
-      res.status(500).json({ message: "Error fetching slots", error: error.message });
-    }
+      next(error);    }
   }
 
-  async searchVendors(req: Request, res: Response) {
+  async searchVendors(req: Request, res: Response,next:NextFunction) {
     const searchTerm = req.query.term as string;
 
     try {
       const vendors = await this.userService.searchVendors(searchTerm);
       return res.status(200).json({ data: vendors });
-    } catch (error) {
-      return res.status(500).json({ message: error });
-    }
+    } catch (error:unknown) {
+      next(error);    }
   }
 
 }

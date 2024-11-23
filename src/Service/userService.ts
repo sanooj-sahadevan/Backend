@@ -36,9 +36,9 @@ export class UserService {
       const hashedPassword = await bcrypt.hash(user.password, 10);
       user.password = hashedPassword;
       return await this.userRepository.createUser(user);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error during user registration:", error);
-      throw new Error(`Registration error: ${(error as Error).message}`);
+      throw new Error(error);
     }
   }
 
@@ -70,43 +70,50 @@ export class UserService {
   async loginUser(email: string, password: string) {
     try {
       const user = await this.userRepository.findUserByEmail(email);
-  
+      console.log('user',user);
+      
       if (!user) {
-        throw new Error("Invalid Password");
+        throw new Error("Email does not exist");
       }
-        const isPasswordValid = await bcrypt.compare(password, user.password);
+      const isPasswordValid = await bcrypt.compare(password, user.password);
       if (!isPasswordValid) {
-        throw new Error("Invalid Password");
+        throw new Error("Incorrect password");
       }
-        const accessToken = generateAccessToken(user._id, "user");
+      const accessToken = generateAccessToken(user._id, "user");
       const refreshToken = generateRefreshToken(user._id, "user");
-  
+
       return { user, accessToken, refreshToken };
     } catch (error: any) {
       console.error("Error during login:", error);
-      throw new Error(error.message);
+      throw new Error(error);
     }
   }
-  
+
 
 
 
 
   async checkEmail(email: string) {
-    const user = await this.userRepository.findUserByEmail(email);
 
-    if (!user) {
-      throw new Error('User not found');
+    try {
+      const user = await this.userRepository.findUserByEmail(email);
+      if (!user) {
+        throw new Error('User not found');
+      }
+      const otp = otpGenerator();
+      await sendEmail(email, otp);
+      return { user, otp };
+    } catch (error:any) {
+      throw new Error(error);
     }
-    const otp = otpGenerator();
-    await sendEmail(email, otp);
-    return { user, otp };
   }
 
 
 
   async verifyOtpService(email: string, otp: string) {
-    const user = await this.userRepository.findUserByEmail(email);
+
+    try {
+      const user = await this.userRepository.findUserByEmail(email);
     if (!user) {
       throw new Error("User not found");
     }
@@ -117,6 +124,11 @@ export class UserService {
     } else {
       throw new Error("Invalid OTP");
     }
+      
+    } catch (error) {
+      
+    }
+    
   }
 
 
@@ -125,8 +137,10 @@ export class UserService {
       console.log('Service: Calling repository to update password');
       const user = await this.userRepository.findUserByEmailupdate(email, password);
       return user;
-    } catch (error) {
+    } catch (error:any) {
       console.error(error);
+      throw new Error(error);
+
     }
   }
 
@@ -140,8 +154,8 @@ export class UserService {
     try {
       const result = await this.userRepository.fetchfromDBDishes(vendorId);
       return result;
-    } catch (error) {
-      throw new Error('Error fetching dishes');
+    } catch (error:any) {
+      throw new Error(error);
     }
   }
 
@@ -150,8 +164,8 @@ export class UserService {
       console.log('Service: Fetching auditoriums for vendor:', vendorId);
       const result = await this.userRepository.fetchfromDBAuditorium(vendorId);
       return result;
-    } catch (error) {
-      throw new Error('Error fetching auditoriums');
+    } catch (error:any) {
+      throw new Error(error);
     }
   }
 
@@ -159,8 +173,8 @@ export class UserService {
   async editUser(userDetails: any) {
     try {
       return await this.userRepository.userEditFromDB(userDetails);
-    } catch (error) {
-      throw new Error('Failed to update user details');
+    } catch (error:any) {
+      throw new Error(`Failed to update user details: ${error.message}`);
     }
   }
 
@@ -171,8 +185,8 @@ export class UserService {
       const vendor = await this.userRepository.findVendor(vendorId);
       const chat = await this.userRepository.findVendorByIdInDb(vendorId, userId);
       return { vendor, chatId: chat.chatId };
-    } catch (error) {
-      throw new Error(`Error finding vendor: ${error}`);
+    } catch (error:any) {
+      throw new Error(`Error finding vendor: ${error.message}`);
     }
   }
 
@@ -180,32 +194,31 @@ export class UserService {
   async fetchReviewById(vendorId: string, userId: string) {
     try {
       console.log('review service');
-      
+
       const review = await this.userRepository.findReviewByIdInDb(vendorId, userId);
-  console.log(review);
-  
+      console.log(review);
+
       if (!review || !review.review) {
         throw new Error('No review found');
       }
       return { review };
-    } catch (error) {
-      throw new Error(`Error fetching review: ${error}`);
+    } catch (error:any) {
+      throw new Error(`Error fetching review: ${error.message}`);
     }
   }
-  
+
 
   async fetchNotificationsById(userId: string) {
     try {
-      console.log('ziya', userId);  // Added userId log for more info
-
+      console.log('ziya', userId);  
       const notificationsData = await this.userRepository.findNotificationsByIdInDb(userId);
 
       if (!notificationsData || !notificationsData.notification) {
-        throw new Error('No notifications found');  // Updated error message for clarity
+        throw new Error('No notifications found');  
       }
 
       console.log(notificationsData, 'okokok');
-      return notificationsData;  // Returning fetched notifications
+      return notificationsData;  
     } catch (error) {
       throw new Error(`Error fetching notifications: ${error}`);  // Improved error message
     }
@@ -361,21 +374,21 @@ export class UserService {
   }
 
 
-  async findChangePassword(email: string, newPassword: string) { 
+  async findChangePassword(email: string, newPassword: string) {
     console.log('Updating password for email:', email);
     const otp = otpGenerator();
     console.log(otp);
-    
-    await sendEmail(email, otp); 
+
+    await sendEmail(email, otp);
 
     return otp;
   }
-  
 
-async  updatePasswordService  (email: string, newPassword: string)  {
-  const hashedPassword = await bcrypt.hash(newPassword, 10);
-  await this.userRepository.updatePasswordInDatabase(email, hashedPassword);
-};
+
+  async updatePasswordService(email: string, newPassword: string) {
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await this.userRepository.updatePasswordInDatabase(email, hashedPassword);
+  };
 
 
 
@@ -496,7 +509,7 @@ async  updatePasswordService  (email: string, newPassword: string)  {
   //   }
   // }
 
- 
+
   async generatePaymentHash({
     txnid,
     amount,
@@ -530,12 +543,12 @@ async  updatePasswordService  (email: string, newPassword: string)  {
 
       const hashString = `${process.env.PAYU_MERCHANT_KEY}|${txnid}|${amount}|${productinfo}|${username}|${email}|${udf1}|${udf2}|${udf3}|${udf4}|${udf5}|${udf6}|${udf7}||||${process.env.PAYU_SALT}`;
       console.log("Hash String:", hashString);
-  
+
       const sha = new jsSHA("SHA-512", "TEXT");
       sha.update(hashString);
       const hash = sha.getHash("HEX");
       console.log("Generated Hash:", hash);
-  
+
       const bookingData = {
         txnid,
         amount,
@@ -552,17 +565,17 @@ async  updatePasswordService  (email: string, newPassword: string)  {
         paymentStatus: "pending",
         paymentHash: hash,
       };
-  console.log(udf7,'end');
-  console.log(udf4,'start');
+      console.log(udf7, 'end');
+      console.log(udf4, 'start');
 
-  
+
       await this.userRepository.saveBooking(bookingData);
       return hash;
     } catch (error) {
       throw new Error("Error generating payment hash");
     }
   }
-  
+
 
 
 
@@ -627,10 +640,10 @@ async  updatePasswordService  (email: string, newPassword: string)  {
 
   async getSlotsByWorkerId(vendorId: string): Promise<ISlot[]> {
     try {
-      let result =  await this.userRepository.getSlotsByWorkerIdFromRepo(vendorId);
+      let result = await this.userRepository.getSlotsByWorkerIdFromRepo(vendorId);
       console.log(result);
       return result
-      
+
     } catch (error) {
       console.error("Error fetching slots from repository:", error);
       throw error;
