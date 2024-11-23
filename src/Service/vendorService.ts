@@ -75,7 +75,6 @@ console.log(vendor.vendorname);
       }
       const accessToken = generateVendorAccessToken(vendor._id, "vendorToken");
       const refreshToken = generatevendorRefreshToken(vendor._id, "vendorToken");
-
       return { vendor, accessToken, refreshToken };
     } catch (error: any) {
       throw new Error(error);
