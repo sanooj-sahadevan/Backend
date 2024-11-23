@@ -229,7 +229,7 @@ export class VendorController {
     try {
       console.log("Starting to add dishes...");
   
-      const vendorId = (req as any).vendorId; 
+      const vendorId = (req as any).id; 
       const { body } = req;
   
       console.log("Vendor ID:", vendorId);
