@@ -17,6 +17,7 @@ export function verifyVendor(req: any, res: Response, next: NextFunction) {
   try {
     const decoded: any = jwt.verify(vendorToken, secret);
     req.vendorId = decoded.vendorId;
+    console.log(decoded,'ooooooooooooooooooo');
 
     next();
   } catch (err: any) {
