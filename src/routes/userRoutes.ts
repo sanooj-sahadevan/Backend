@@ -23,7 +23,6 @@ router.post('/forgottenpassword', userController.forgottenPassword.bind(userCont
 router.post('/updatePassword', userController.updatePassword.bind(userController))
 router.post('/logout', userController.logoutController.bind(userController));
 
-// customerRouter.post("/cutomerLogout",verifyTokenAndRole('customer'),CustomerLogoutController)
 
 router.get('/dishlist', userController.dishlist.bind(userController));
 router.get('/auditoriumlist', userController.auditoriumlist.bind(userController));

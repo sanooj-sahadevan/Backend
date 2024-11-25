@@ -571,8 +571,8 @@ export class UserService {
 
       await this.userRepository.saveBooking(bookingData);
       return hash;
-    } catch (error) {
-      throw new Error("Error generating payment hash");
+    } catch (error:any) {
+      throw new Error(error);
     }
   }
 

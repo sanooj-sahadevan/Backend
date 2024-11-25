@@ -549,7 +549,6 @@ export class UserRepository extends BaseRepository<User> implements IUserReposit
       const formattedStartDate = startDate.toISOString().split('T')[0];
       console.log('Formatted Start Date:', formattedStartDate);
   
-      // Check if the slot is already booked
       const availableSlot = await bookedModel
         .findOne({
           vendorId: bookingData.productinfo,
