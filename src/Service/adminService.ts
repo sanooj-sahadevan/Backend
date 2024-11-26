@@ -12,10 +12,10 @@ export class AdminService implements IAdminService {
 
   async loginUser(email: string, password: string) {
     try {
-      if (process.env.ADMIN_EMAIL !== email) {
+      if (process.env.ADMIN_EMAIL === email) {
         console.error(Error);
       }
-      if (process.env.ADMIN_PASS !== password) {
+      if (process.env.ADMIN_PASS === password) {
         console.error(Error);
       }
       const adminToken = jwt.sign(
@@ -30,6 +30,10 @@ export class AdminService implements IAdminService {
     } catch (error) {
       throw new Error    }
   }
+
+
+
+   
 
   async getAllVendorsService() {
     try {

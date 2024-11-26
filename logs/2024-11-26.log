@@ -1,0 +1,7 @@
+{"level":"info","message":"{\"method\":\"GET\",\"url\":\"/v1/api/user/vendors\",\"status\":\"200\",\"responseTime\":\"129.637\"}","timestamp":"2024-11-26T13:35:51.155Z"}
+{"level":"info","message":"{\"method\":\"POST\",\"url\":\"/v1/api/admin/login\",\"status\":\"200\",\"responseTime\":\"64.748\"}","timestamp":"2024-11-26T13:36:02.366Z"}
+{"level":"info","message":"{\"method\":\"GET\",\"url\":\"/v1/api/admin/dashboard\",\"status\":\"200\",\"responseTime\":\"180.505\"}","timestamp":"2024-11-26T13:36:06.591Z"}
+{"level":"info","message":"{\"method\":\"POST\",\"url\":\"/v1/api/admin/login\",\"status\":\"200\",\"responseTime\":\"3.661\"}","timestamp":"2024-11-26T13:36:47.445Z"}
+{"level":"info","message":"{\"method\":\"GET\",\"url\":\"/v1/api/admin/dashboard\",\"status\":\"200\",\"responseTime\":\"167.071\"}","timestamp":"2024-11-26T13:36:49.272Z"}
+{"level":"info","message":"{\"method\":\"GET\",\"url\":\"/v1/api/user/vendors\",\"status\":\"200\",\"responseTime\":\"65.785\"}","timestamp":"2024-11-26T13:37:04.414Z"}
+{"level":"info","message":"{\"method\":\"GET\",\"url\":\"/v1/api/user/vendors\",\"status\":\"200\",\"responseTime\":\"69.614\"}","timestamp":"2024-11-26T13:37:04.429Z"}

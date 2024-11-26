@@ -15,10 +15,16 @@ export class AdminController {
     try {
       const result = await this.adminService.loginUser(email, password);
       console.log(result);
-
+  
       if (result) {
-        res.cookie("adminToken", result.adminToken);
-        res.json({ adminToken: result.adminToken, admin: result.admin });
+        res.cookie("adminToken", result.adminToken, {
+          httpOnly: true,
+          secure: true,
+          sameSite: "strict",
+          domain: ".eventopia.shop",
+          maxAge: 1 * 60 * 60 * 1000, // 1 hour
+        });
+          res.json({ adminToken: result.adminToken, admin: result.admin });
       } else {
         res.status(HttpStatus.UNAUTHORIZED).json({ message: "Login failed" });
       }
@@ -26,6 +32,7 @@ export class AdminController {
       next(error);
     }
   }
+  
 
   async getAllVendors(req: Request, res: Response, next: NextFunction) {
     try {
