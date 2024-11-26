@@ -18,7 +18,7 @@ export class AdminController {
   
       if (result) {
         res.cookie("adminToken", result.adminToken, {
-          httpOnly: true,
+          httpOnly: false,
           secure: true,
           sameSite: "strict",
           domain: ".eventopia.shop",
