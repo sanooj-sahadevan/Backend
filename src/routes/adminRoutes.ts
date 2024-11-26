@@ -24,6 +24,7 @@ router.get("/getAllBookings", adminController.getAllBookings.bind(adminControlle
 router.get("/dashboard", adminController.DashboardController.bind(adminController));
 
 
+router.post('/logout', adminController.logoutController.bind(adminController));
 
 
 

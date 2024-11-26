@@ -18,11 +18,12 @@ export class AdminController {
   
       if (result) {
         res.cookie("adminToken", result.adminToken, {
-          httpOnly: false,
+          httpOnly: true, // Make it true for consistency
           secure: true,
           sameSite: "strict",
           domain: ".eventopia.shop",
           maxAge: 1 * 60 * 60 * 1000, // 1 hour
+   
         });
           res.json({ adminToken: result.adminToken, admin: result.admin });
       } else {
@@ -33,6 +34,30 @@ export class AdminController {
     }
   }
   
+
+
+
+  async logoutController(req: Request, res: Response, next: NextFunction) {
+    try {
+      console.log("Logging out, clearing cookies...");
+      res.clearCookie("adminToken", {
+        httpOnly: true, // Ensure this matches the login settings
+        secure: true,
+        sameSite: "strict",
+        domain: ".eventopia.shop",
+        path: "/", // Ensure this matches login
+      });
+      console.log("Token cleared");
+      return res.status(200).json({ success: true, message: "Logged out successfully" });
+    } catch (error: unknown) {
+      console.error("Error in logoutController:", error);
+      next(error);
+    }
+  }
+  
+
+
+
 
   async getAllVendors(req: Request, res: Response, next: NextFunction) {
     try {

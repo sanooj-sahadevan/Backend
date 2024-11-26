@@ -61,13 +61,6 @@ export class UserController {
     try {
       console.log('Logging out, clearing cookies...');
 
-      res.clearCookie("adminToken", {
-        httpOnly: true,
-        secure: true,
-        sameSite: "strict",
-        domain: ".eventopia.shop",
-        path: "/",
-      });
       res.clearCookie("refreshToken", {
         httpOnly: true,
         secure: true,
