@@ -23,7 +23,6 @@ connectToMongoDB();
 
 const httpServer = createServer(app);
 
-//=12345
 const allowedOrigins = [
   "https://e-vent-project-ii.vercel.app",
   "https://www.eventopia.shop",
