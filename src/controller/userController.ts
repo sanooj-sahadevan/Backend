@@ -60,6 +60,14 @@ export class UserController {
   async logoutController(req: Request, res: Response, next: NextFunction) {
     try {
       console.log('Logging out, clearing cookies...');
+
+      res.clearCookie("adminToken", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+        domain: ".eventopia.shop",
+        path: "/",
+      });
       res.clearCookie("refreshToken", {
         httpOnly: true,
         secure: true,
