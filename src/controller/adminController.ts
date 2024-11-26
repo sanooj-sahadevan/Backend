@@ -18,14 +18,13 @@ export class AdminController {
   
       if (result) {
         res.cookie("adminToken", result.adminToken, {
-          httpOnly: true, // Make it true for consistency
+          httpOnly: false, // Allow access from the frontend
           secure: true,
           sameSite: "strict",
           domain: ".eventopia.shop",
           maxAge: 1 * 60 * 60 * 1000, // 1 hour
-   
         });
-          res.json({ adminToken: result.adminToken, admin: result.admin });
+        res.json({ adminToken: result.adminToken, admin: result.admin });
       } else {
         res.status(HttpStatus.UNAUTHORIZED).json({ message: "Login failed" });
       }
@@ -33,6 +32,7 @@ export class AdminController {
       next(error);
     }
   }
+  
   
 
 
